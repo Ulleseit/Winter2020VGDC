@@ -132,6 +132,7 @@ GameObject:
   - component: {fileID: 177530912}
   - component: {fileID: 177530911}
   - component: {fileID: 177530910}
+  - component: {fileID: 177530913}
   m_Layer: 5
   m_Name: ExitButton
   m_TagString: Untagged
@@ -201,7 +202,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 177530911}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 177530913}
+        m_MethodName: Exit
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &177530911
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -238,6 +250,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 177530908}
   m_CullTransparentMesh: 0
+--- !u!114 &177530913
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 177530908}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5740351046470ba459b37fa276ea36e9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &542743901
 GameObject:
   m_ObjectHideFlags: 0
@@ -352,6 +376,7 @@ GameObject:
   - component: {fileID: 718080327}
   - component: {fileID: 718080326}
   - component: {fileID: 718080325}
+  - component: {fileID: 718080328}
   m_Layer: 5
   m_Name: Credits
   m_TagString: Untagged
@@ -421,7 +446,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 718080326}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 718080328}
+        m_MethodName: toCredits
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &718080326
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -458,6 +494,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 718080323}
   m_CullTransparentMesh: 0
+--- !u!114 &718080328
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 718080323}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 150f6cb7e75657243905be792418ccba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1294152611
 GameObject:
   m_ObjectHideFlags: 0
@@ -849,6 +897,7 @@ GameObject:
   - component: {fileID: 1527724412}
   - component: {fileID: 1527724411}
   - component: {fileID: 1527724410}
+  - component: {fileID: 1527724413}
   m_Layer: 5
   m_Name: StartButton
   m_TagString: Untagged
@@ -918,7 +967,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1527724411}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1527724413}
+        m_MethodName: nextScene
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: StartButtonPressed.nextScene()
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1527724411
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -955,6 +1015,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1527724408}
   m_CullTransparentMesh: 0
+--- !u!114 &1527724413
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1527724408}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ca457a845902044796f4a66e2bf3ea5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1672975088
 GameObject:
   m_ObjectHideFlags: 0
