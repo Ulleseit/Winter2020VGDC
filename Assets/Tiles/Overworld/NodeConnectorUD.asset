@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 13312, guid: 0000000000000000e000000000000000, type: 0}
-  m_Name: Node
+  m_Name: NodeConnectorUD
   m_EditorClassIdentifier: 
-  m_Sprite: {fileID: 21300000, guid: 23faba6a2cb5e0682a78347c3417e5b8, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 6b82e563a6beb5a20a13253a4d2c530c, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Transform:
     e00: 1

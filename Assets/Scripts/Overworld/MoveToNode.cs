@@ -24,7 +24,11 @@ public class MoveToNode : MonoBehaviour
         pos.z = 0;
         Vector3Int tileLocation = tilemap.WorldToCell(pos);//0,0 is the starting node location
         tile = tilemap.GetTile(tileLocation);
-        if(Equals(tile.name, "Node"))
+        Debug.Log(pos.x);
+        Debug.Log(Camera.main.transform.position.x+2);
+        Debug.Log(pos.y);
+        Debug.Log(Camera.main.transform.position.y+2);
+        if(Equals(tile.name, "Node") && ((Camera.main.transform.position.x+2 == pos.x && Camera.main.transform.position.y == pos.y )|| (Camera.main.transform.position.y+2 == pos.y && Camera.main.transform.position.x == pos.x )))
         {
           pos.z = -10;
           Camera.main.transform.position = (pos);
