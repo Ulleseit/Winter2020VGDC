@@ -1,4 +1,5 @@
-﻿using System.Collections;
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
@@ -7,6 +8,7 @@ public class MoveToNode : MonoBehaviour
 {
     Tilemap tilemap;
     TileBase tile;
+    List<(float, float)> tupleList = new List<(float, float)>{};
     // Start is called before the first frame update
     void Start()
     {
@@ -24,15 +26,40 @@ public class MoveToNode : MonoBehaviour
         pos.z = 0;
         Vector3Int tileLocation = tilemap.WorldToCell(pos);//0,0 is the starting node location
         tile = tilemap.GetTile(tileLocation);
-        Debug.Log(pos.x);
-        Debug.Log(Camera.main.transform.position.x+2);
-        Debug.Log(pos.y);
-        Debug.Log(Camera.main.transform.position.y+2);
-        if(Equals(tile.name, "Node") && ((Camera.main.transform.position.x+2 == pos.x && Camera.main.transform.position.y == pos.y )|| (Camera.main.transform.position.y+2 == pos.y && Camera.main.transform.position.x == pos.x )))
+        if(Equals(tile.name, "Node") && (Next(pos)))
         {
           pos.z = -10;
           Camera.main.transform.position = (pos);
+          loadEvent();
         }
+      }
+    }
+
+    bool Next(Vector3 pos)
+    {
+      (float,float) t = (pos.x, pos.y);
+      bool move = (!(tupleList.Contains(t)) && ((Camera.main.transform.position.x+2 == pos.x && Camera.main.transform.position.y == pos.y ) || (Camera.main.transform.position.y+2 == pos.y && Camera.main.transform.position.x == pos.x ) || (Camera.main.transform.position.y-2 == pos.y && Camera.main.transform.position.x == pos.x )));
+      if(move)
+      {
+          tupleList.Add(t);
+      }
+      return(move);
+    }
+
+    void loadEvent()
+    {
+      float r = UnityEngine.Random.Range(0.0f, 10.0f);
+      if(r < 2.0f)
+      {
+        Debug.Log("Story Event");
+      }
+      else if(r < 4.0f && r > 2.0f)
+      {
+        Debug.Log("Town");
+      }
+      else
+      {
+        Debug.Log("Battle");
       }
     }
 }
