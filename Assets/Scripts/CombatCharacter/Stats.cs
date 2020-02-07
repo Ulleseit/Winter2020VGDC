@@ -7,6 +7,15 @@ public class Stats : MonoBehaviour
     public int initiative;
     public int maxActionPoints;
     public int currentActionPoints;
+
+    // Stats for combat
+    public int health;
+    public int armor; // low priority
+    public int strength;
+    public int mana; // low priority
+    public int accuracy; // low priority
+    public int evasion; // low priority
+
     void Start()
     {
 
