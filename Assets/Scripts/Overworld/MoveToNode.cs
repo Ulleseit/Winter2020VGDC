@@ -26,7 +26,7 @@ public class MoveToNode : MonoBehaviour
         pos.z = 0;
         Vector3Int tileLocation = tilemap.WorldToCell(pos);//0,0 is the starting node location
         tile = tilemap.GetTile(tileLocation);
-        if(Equals(tile.name, "Node") && (Next(pos)))
+        if((Equals(tile.name, "Node1") || Equals(tile.name, "Node2") ||Equals(tile.name, "Node3") ||Equals(tile.name, "Node4") ||Equals(tile.name, "Node5") ||Equals(tile.name, "Node6") ||Equals(tile.name, "Node7") ||Equals(tile.name, "Node8") ||Equals(tile.name, "Node9") ||Equals(tile.name, "Node10") ||Equals(tile.name, "Node11") ||Equals(tile.name, "Node12")) && (Next(pos)))
         {
           pos.z = -10;
           Camera.main.transform.position = (pos);
@@ -56,7 +56,6 @@ public class MoveToNode : MonoBehaviour
       else if(r < 4.0f && r > 2.0f)
       {
         Debug.Log("Town");
-        
       }
       else
       {
