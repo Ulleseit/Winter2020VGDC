@@ -56,6 +56,7 @@ public class MoveToNode : MonoBehaviour
       else if(r < 4.0f && r > 2.0f)
       {
         Debug.Log("Town");
+        
       }
       else
       {
