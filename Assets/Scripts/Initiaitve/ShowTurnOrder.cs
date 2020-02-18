@@ -14,7 +14,7 @@ public class ShowTurnOrder : MonoBehaviour
     void Update()
     {
         string x = ("Combat Order: ");
-        combatMembers = Camera.main.GetComponent<CharacterTurnMove>().combatMembers;
+        combatMembers = Camera.main.GetComponent<CharacterTurnMove>().createCombatMembers();
         for(int i = 0; i < combatMembers.Length; i++)
         {
           x += (combatMembers[i].name + " ");//Adds all ordered members of combat to string
