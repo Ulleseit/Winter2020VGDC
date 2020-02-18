@@ -2,16 +2,19 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using UnityEngine.Tilemaps;
 
 public class CharacterTurnMove : MonoBehaviour
 {
     GameObject[] characters;
     GameObject selected = null;
     GameObject[] enemies;
+	Tilemap tilemap;
     void Start()
     {
 		characters = GameObject.FindGameObjectsWithTag("Character");//Set up and update array of GameObjects that are player controlled
 		enemies = GameObject.FindGameObjectsWithTag("Enemy");//Set up and update array of GameObjects that are AI controlled
+		tilemap = this.GetComponent<Tilemap>();
     }
     void Update()
     {
@@ -78,7 +81,7 @@ public class CharacterTurnMove : MonoBehaviour
 		}
 		else if(selected.tag == "Enemy")//Enemy movement code will go here in the future
 		{
-			Debug.Log("Blegh");
+			Node[,] nodes = buildEnemyGrid(characters);
 			selected.GetComponent<Stats>().reduceInitiative();
 		}
 	}
@@ -116,5 +119,77 @@ public class CharacterTurnMove : MonoBehaviour
 			combatMembers[n] = temp;
 		}
 		return combatMembers;
+	}
+	
+	public class Node
+	{
+		bool walkable;
+		int gridX;
+		int gridY;
+		public float penalty;
+		int gCost;
+		int hCost;
+		Node parent;
+		
+		public Node(float _price, int _gridX, int _gridY)
+		{
+			walkable = _price != 0.0f;
+			penalty = _price;
+			gridX = _gridX;
+			gridY = _gridY;
+		}
+
+		public int fcost
+		{
+			get
+			{
+				return gCost + hCost;
+			}	
+			
+		}
+	}
+	
+	Node[,] buildEnemyGrid(GameObject[] occupied)
+	{
+		Node[,] nodes = new Node[tilemap.size.x, tilemap.size.y];
+		for(int x = 0; x < tilemap.size.x; x++)
+		{
+			for(int y = 0; y < tilemap.size.y; y++)
+			{
+				TileBase tile = tilemap.GetTile(new Vector3Int(x, y, 0));
+				if(tile.name == "Flowers")
+				{
+					nodes[x,y] = new Node(2.0f, x, y);
+				}
+				else if(tile.name == "Flowerpath")
+				{
+					nodes[x,y] = new Node(1.0f, x, y);
+				}
+				else if(tile.name == "Water")
+				{
+					nodes[x,y] = new Node(0.0f, x, y);
+				}
+				foreach(GameObject c in occupied)
+				{
+					if(c.GetComponent<Transform>().position.x-.5 == x && c.GetComponent<Transform>().position.y-.5 == y)
+					{
+						nodes[x,y] = new Node(0.0f, x, y);
+					}
+				}
+			}
+		}
+		return nodes;
+		/*
+		String z = "";
+		for (int i = 0; i < nodes.GetLength(0); i++)
+        {
+            for (int j = 0; j < nodes.GetLength(1); j++)
+            {
+                z += (nodes[i,j].penalty).ToString();
+            }
+			Debug.Log(z);
+			z = "";
+        }
+		*/
 	}
 }

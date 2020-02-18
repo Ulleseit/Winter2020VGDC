@@ -7,6 +7,7 @@ public class ShowTurnOrder : MonoBehaviour
 {
     Text text;
     GameObject[] combatMembers;
+	public GameObject turnMoveHolder;
     void Start()
     {
       text = GetComponent<Text>();
@@ -14,7 +15,7 @@ public class ShowTurnOrder : MonoBehaviour
     void Update()
     {
         string x = ("Combat Order: ");
-        combatMembers = Camera.main.GetComponent<CharacterTurnMove>().createCombatMembers();
+        combatMembers = turnMoveHolder.GetComponent<CharacterTurnMove>().createCombatMembers();
         for(int i = 0; i < combatMembers.Length; i++)
         {
           x += (combatMembers[i].name + " ");//Adds all ordered members of combat to string
