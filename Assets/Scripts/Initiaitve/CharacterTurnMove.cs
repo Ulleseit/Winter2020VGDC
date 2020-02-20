@@ -10,11 +10,18 @@ public class CharacterTurnMove : MonoBehaviour
     GameObject selected = null;
     GameObject[] enemies;
 	Tilemap tilemap;
+	public GameObject[] buttons;
+	bool buttonPressed;
+	bool menu;
+	Vector3 prevPos;
+	Vector3 movePosition;
     void Start()
     {
 		characters = GameObject.FindGameObjectsWithTag("Character");//Set up and update array of GameObjects that are player controlled
 		enemies = GameObject.FindGameObjectsWithTag("Enemy");//Set up and update array of GameObjects that are AI controlled
 		tilemap = this.GetComponent<Tilemap>();
+		buttonPressed = false;
+		menu = false;
     }
     void Update()
     {
@@ -29,10 +36,11 @@ public class CharacterTurnMove : MonoBehaviour
 			selected.GetComponent<Stats>().currentActionPoints = selected.GetComponent<Stats>().maxActionPoints;
 		}
 	  
-		else if(selected.tag == "Character")
+		else if(selected.tag == "Character" && !menu)
 		{
 			if(Input.GetMouseButtonDown(0))//Check if Player is clicking with a selected character
-			{
+			{	
+				//Movement Code
 				if((int)(Math.Abs(selected.GetComponent<Transform>().position.x - position.x) + Math.Abs(selected.GetComponent<Transform>().position.y - position.y)) > selected.GetComponent<Stats>().currentActionPoints)
 				{
 					Debug.Log("Too far to move!");
@@ -45,32 +53,30 @@ public class CharacterTurnMove : MonoBehaviour
 					{
 						if(combatMembers[x].GetComponent<Transform>().position.x == position.x && combatMembers[x].GetComponent<Transform>().position.y == position.y)//Checks if any GameObjects are in the selected position to avoid collision
 						{
-							if(combatMembers[x].tag == "Character")
-							{
-								matching = true;//If any GameObjects are in the position of selected movement location, change matching to true
-								ally = true;
-							}
-							else if(combatMembers[x].tag == "Enemy")
-							{
-								matching = true;
-								ally = false;
-							}
-							
+							matching = true;//If any GameObjects are in the position of selected movement location, change matching to true
 						}
 					}
-					if(matching && ally)//If there is a GameObject in position, don't allow movement
+					if(matching)//If there is a GameObject in position, don't allow movement
 					{
 						Debug.Log("Same position as another character, can not move here!");
 					}
-					else if(matching && !ally)
-					{
-						Debug.Log("Attack");
-					}
+
 					else if(!matching)
 					{
-						selected.GetComponent<Stats>().reduceActionPoints((int)(Math.Abs(selected.GetComponent<Transform>().position.x - position.x) + Math.Abs(selected.GetComponent<Transform>().position.y - position.y)));//Spend AP to move squares
+						movePosition = position;
+						prevPos = selected.GetComponent<Transform>().position;
 						selected.GetComponent<MoveCharacter>().move(position.x, position.y);//Move GameObject to selected space
+						foreach(GameObject button in buttons)
+						{
+							button.SetActive(true);
+						}
+						menu = true;
 					}
+					//End Movement Code
+					//Options Code
+					
+					//End Options Code
+					
 				}
 
 			}
@@ -78,6 +84,19 @@ public class CharacterTurnMove : MonoBehaviour
 			{
 				selected.GetComponent<Stats>().reduceInitiative();
 			}
+		}
+		else if(selected.tag == "Character" && menu)
+		{
+			if(buttonPressed)
+			{
+				foreach(GameObject button in buttons)
+				{
+					button.SetActive(false);
+				}
+				menu = false;
+				buttonPressed = false;
+			}
+			
 		}
 		else if(selected.tag == "Enemy")//Enemy movement code will go here in the future
 		{
@@ -122,4 +141,17 @@ public class CharacterTurnMove : MonoBehaviour
 		return combatMembers;
 	}
 
+
+	public void returnButton()
+	{
+		selected.GetComponent<Transform>().position = prevPos;
+		buttonPressed = true;
+	}
+	
+	public void endButton()
+	{
+		Debug.Log("Blegh");
+		selected.GetComponent<Stats>().reduceActionPoints((int)(Math.Abs(prevPos.x - movePosition.x) + Math.Abs(prevPos.y - movePosition.y)));//Spend AP to move squares
+		buttonPressed = true;
+	}
 }
