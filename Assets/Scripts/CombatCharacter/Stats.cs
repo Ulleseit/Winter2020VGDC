@@ -32,4 +32,7 @@ public class Stats : MonoBehaviour
     {
       currentActionPoints -= n;
     }
+    public string printStat(){
+    	return " Stats \n" + "initiative: " + initiative + "\nActionPoints: " + maxActionPoints + "\nhealth: " + health + "\narmor:" + armor + "\nstrength: " + strength + "\nmana: " + mana + "\naccuracy: " + accuracy + "evasion: " + evasion;
+    }
 }
