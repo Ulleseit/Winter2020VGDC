@@ -9,37 +9,37 @@ public class CharacterTurnMove : MonoBehaviour
     GameObject[] characters;
     GameObject selected = null;
     GameObject[] enemies;
-	Tilemap tilemap;
-	public GameObject[] buttons;
-	bool buttonPressed;
-	bool menu;
-	Vector3 prevPos;
-	Vector3 movePosition;
+  	Tilemap tilemap;
+  	public GameObject[] buttons;
+  	bool buttonPressed = false;
+  	bool menu = false;
+    int prevPoints;
+    Vector3 prevPos;
+    bool endTurn = false;
     void Start()
     {
 		characters = GameObject.FindGameObjectsWithTag("Character");//Set up and update array of GameObjects that are player controlled
 		enemies = GameObject.FindGameObjectsWithTag("Enemy");//Set up and update array of GameObjects that are AI controlled
 		tilemap = this.GetComponent<Tilemap>();
-		buttonPressed = false;
-		menu = false;
     }
     void Update()
     {
 		GameObject[] combatMembers = createCombatMembers();
-	  
+
 		Vector3 position = createTileMouse();
-	  
+
 		selected = combatMembers[0];
-		if(selected.GetComponent<Stats>().currentActionPoints == 0)//When are character reaches zero action points, the turn is ended, and action points refreshed
+		if(selected.GetComponent<Stats>().currentActionPoints == 0 && endTurn)//When are character reaches zero action points, the turn is ended, and action points refreshed
 		{
 			selected.GetComponent<Stats>().reduceInitiative();
 			selected.GetComponent<Stats>().currentActionPoints = selected.GetComponent<Stats>().maxActionPoints;
+      endTurn = false;
 		}
-	  
+
 		else if(selected.tag == "Character" && !menu)
 		{
 			if(Input.GetMouseButtonDown(0))//Check if Player is clicking with a selected character
-			{	
+			{
 				//Movement Code
 				if((int)(Math.Abs(selected.GetComponent<Transform>().position.x - position.x) + Math.Abs(selected.GetComponent<Transform>().position.y - position.y)) > selected.GetComponent<Stats>().currentActionPoints)
 				{
@@ -48,7 +48,6 @@ public class CharacterTurnMove : MonoBehaviour
 				else
 				{
 					bool matching = false;//Initialize check
-					bool ally = false;
 					for(int x = 0; x < combatMembers.Length; x++)
 					{
 						if(combatMembers[x].GetComponent<Transform>().position.x == position.x && combatMembers[x].GetComponent<Transform>().position.y == position.y)//Checks if any GameObjects are in the selected position to avoid collision
@@ -63,8 +62,9 @@ public class CharacterTurnMove : MonoBehaviour
 
 					else if(!matching)
 					{
-						movePosition = position;
-						prevPos = selected.GetComponent<Transform>().position;
+            prevPoints = selected.GetComponent<Stats>().currentActionPoints;
+            prevPos = selected.GetComponent<Transform>().position;
+            selected.GetComponent<Stats>().reduceActionPoints((int)(Math.Abs(selected.GetComponent<Transform>().position.x - position.x) + Math.Abs(selected.GetComponent<Transform>().position.y - position.y)));
 						selected.GetComponent<MoveCharacter>().move(position.x, position.y);//Move GameObject to selected space
 						foreach(GameObject button in buttons)
 						{
@@ -74,9 +74,9 @@ public class CharacterTurnMove : MonoBehaviour
 					}
 					//End Movement Code
 					//Options Code
-					
+
 					//End Options Code
-					
+
 				}
 
 			}
@@ -96,7 +96,7 @@ public class CharacterTurnMove : MonoBehaviour
 				menu = false;
 				buttonPressed = false;
 			}
-			
+
 		}
 		else if(selected.tag == "Enemy")//Enemy movement code will go here in the future
 		{
@@ -105,7 +105,7 @@ public class CharacterTurnMove : MonoBehaviour
 
 		}
 	}
-	
+
 	Vector3 createTileMouse()
 	{
 		Vector3 positionA = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -114,7 +114,7 @@ public class CharacterTurnMove : MonoBehaviour
 		positionA.y = (float)(System.Math.Floor(positionA.y)+.5);//Make mouse only count at center of each square, instead of true position
 		return positionA;
 	}
-	
+
 	public GameObject[] createCombatMembers()
 	{
 		GameObject[] combatMembers;
@@ -144,14 +144,15 @@ public class CharacterTurnMove : MonoBehaviour
 
 	public void returnButton()
 	{
+    selected.GetComponent<Stats>().currentActionPoints = prevPoints;
 		selected.GetComponent<Transform>().position = prevPos;
 		buttonPressed = true;
 	}
-	
+
 	public void endButton()
 	{
-		Debug.Log("Blegh");
-		selected.GetComponent<Stats>().reduceActionPoints((int)(Math.Abs(prevPos.x - movePosition.x) + Math.Abs(prevPos.y - movePosition.y)));//Spend AP to move squares
+    endTurn = true;
+    selected.GetComponent<Stats>().reduceActionPoints(selected.GetComponent<Stats>().currentActionPoints);
 		buttonPressed = true;
 	}
 }
