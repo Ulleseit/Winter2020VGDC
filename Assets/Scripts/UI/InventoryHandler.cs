@@ -16,10 +16,18 @@ public class InventoryHandler : MonoBehaviour
 		// AddItem(new Item { name = "Health Potion", itemType = Item.ItemType.Potion, amount = 5 });
 		// RemoveItem(new Item { name = "Sword", itemType = Item.ItemType.Weapon, amount = 1 });
 	}
-
+	
     public void AddItem(Item item) 
 	{
-		ItemList.Add(item);
+		if (ItemList.Count <= numItemSlot)
+		{
+			ItemList.Add(item);
+		}
+		else
+		{
+			Debug.Log("Inventory Full!");
+		}
+		
 	}
 
     public void RemoveItem (Item item)
