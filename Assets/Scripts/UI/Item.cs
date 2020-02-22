@@ -18,5 +18,6 @@ public class Item
     public ItemType itemType;
     public int amount;
     public string name;
+    public Sprite sprite;
 
 }
