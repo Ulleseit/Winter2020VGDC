@@ -10,6 +10,11 @@ public class InventoryHandler : MonoBehaviour
 	void Start()
 	{
 		ItemList = new List<Item>();
+
+		// Tests
+		// AddItem(new Item { name = "Sword", itemType = Item.ItemType.Weapon, amount = 1 });
+		// AddItem(new Item { name = "Health Potion", itemType = Item.ItemType.Potion, amount = 5 });
+		// RemoveItem(new Item { name = "Sword", itemType = Item.ItemType.Weapon, amount = 1 });
 	}
 
     public void AddItem(Item item) 
@@ -25,9 +30,16 @@ public class InventoryHandler : MonoBehaviour
 		    {
 				break;
 		    }
-			else if (ItemList[i].name == item.name)
+			else if (ItemList[i].itemType == item.itemType && ItemList[i].name == item.name)
 			{
-				ItemList.RemoveAt(i);
+				if (ItemList[i].amount > 1)
+				{
+					ItemList[i].amount -= 1;
+				}
+				else
+				{
+					ItemList.RemoveAt(i);
+				}
 				break;
 			}
 		}
