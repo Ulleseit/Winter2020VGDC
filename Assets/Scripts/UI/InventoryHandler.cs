@@ -3,37 +3,54 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 public class InventoryHandler : MonoBehaviour
-{/*
-	public item ItemToAdd;
+{ 
  	public const int numItemSlot = 24;
-	public List<item> ItemsList;
-	// Start is called before the first frame update
-    public static void AddItems(item items){
-	for (int i = 0; i < numItemSlot; i++)
+	private List<Item> ItemList;
+
+	void Start()
 	{
-	    if (items[i] == null)
-	    {
-	    	
-		ItemsList[i] = items;
-		itemImages[i].sprite = items.sprite;
-		itemImages[i].enabled = true;
-		return;
-	    }
+		ItemList = new List<Item>();
+
+		// Tests
+		// AddItem(new Item { name = "Sword", itemType = Item.ItemType.Weapon, amount = 1 });
+		// AddItem(new Item { name = "Health Potion", itemType = Item.ItemType.Potion, amount = 5 });
+		// RemoveItem(new Item { name = "Sword", itemType = Item.ItemType.Weapon, amount = 1 });
+	}
+	
+    public void AddItem(Item item) 
+	{
+		if (ItemList.Count <= numItemSlot)
+		{
+			ItemList.Add(item);
+		}
+		else
+		{
+			Debug.Log("Inventory Full!");
+		}
+		
 	}
 
-    }
-    public static void RemoveItem (item items)
+    public void RemoveItem (Item item)
     {
     	for (int i = 0; i < numItemSlot; i++)
 		{
-		    if (items[i] == null)
+		    if (ItemList[i] == null)
 		    {
-			ItemsList[i] = null;
-			itemImages[i].sprite = null;
-			itemImages[i].enabled = false;
-			return;
+				break;
 		    }
+			else if (ItemList[i].itemType == item.itemType && ItemList[i].name == item.name)
+			{
+				if (ItemList[i].amount > 1)
+				{
+					ItemList[i].amount -= 1;
+				}
+				else
+				{
+					ItemList.RemoveAt(i);
+				}
+				break;
+			}
+		}
 	}
-    }
-    */
+   
 }
