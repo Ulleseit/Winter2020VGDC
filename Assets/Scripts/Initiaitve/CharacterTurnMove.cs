@@ -16,6 +16,7 @@ public class CharacterTurnMove : MonoBehaviour
     int prevPoints;
     Vector3 prevPos;
     bool endTurn = false;
+    bool cameraLock = true;
     void Start()
     {
 		characters = GameObject.FindGameObjectsWithTag("Character");//Set up and update array of GameObjects that are player controlled
@@ -24,15 +25,16 @@ public class CharacterTurnMove : MonoBehaviour
     }
     void Update()
     {
+    
 		GameObject[] combatMembers = createCombatMembers();
 
 		Vector3 position = createTileMouse();
 
 		selected = combatMembers[0];
-		if(selected.GetComponent<Stats>().currentActionPoints == 0 && endTurn)//When are character reaches zero action points, the turn is ended, and action points refreshed
+		if(selected.GetComponent<Character>().currentActionPoints == 0 && endTurn)//When are character reaches zero action points, the turn is ended, and action points refreshed
 		{
-			selected.GetComponent<Stats>().reduceInitiative();
-			selected.GetComponent<Stats>().currentActionPoints = selected.GetComponent<Stats>().maxActionPoints;
+			selected.GetComponent<Character>().reduceInitiative();
+			selected.GetComponent<Character>().currentActionPoints = selected.GetComponent<Character>().maxActionPoints;
       endTurn = false;
 		}
 
@@ -41,7 +43,7 @@ public class CharacterTurnMove : MonoBehaviour
 			if(Input.GetMouseButtonDown(0))//Check if Player is clicking with a selected character
 			{
 				//Movement Code
-				if((int)(Math.Abs(selected.GetComponent<Transform>().position.x - position.x) + Math.Abs(selected.GetComponent<Transform>().position.y - position.y)) > selected.GetComponent<Stats>().currentActionPoints)
+				if((int)(Math.Abs(selected.GetComponent<Transform>().position.x - position.x) + Math.Abs(selected.GetComponent<Transform>().position.y - position.y)) > selected.GetComponent<Character>().currentActionPoints)
 				{
 					Debug.Log("Too far to move!");
 				}
@@ -50,7 +52,7 @@ public class CharacterTurnMove : MonoBehaviour
 					bool matching = false;//Initialize check
 					for(int x = 0; x < combatMembers.Length; x++)
 					{
-						if(combatMembers[x].GetComponent<Transform>().position.x == position.x && combatMembers[x].GetComponent<Transform>().position.y == position.y)//Checks if any GameObjects are in the selected position to avoid collision
+						if(combatMembers[x].GetComponent<Transform>().position.x == position.x && combatMembers[x].GetComponent<Transform>().position.y == position.y && combatMembers[x] != selected)//Checks if any GameObjects are in the selected position to avoid collision
 						{
 							matching = true;//If any GameObjects are in the position of selected movement location, change matching to true
 						}
@@ -62,9 +64,9 @@ public class CharacterTurnMove : MonoBehaviour
 
 					else if(!matching)
 					{
-            prevPoints = selected.GetComponent<Stats>().currentActionPoints;
+            prevPoints = selected.GetComponent<Character>().currentActionPoints;
             prevPos = selected.GetComponent<Transform>().position;
-            selected.GetComponent<Stats>().reduceActionPoints((int)(Math.Abs(selected.GetComponent<Transform>().position.x - position.x) + Math.Abs(selected.GetComponent<Transform>().position.y - position.y)));
+            selected.GetComponent<Character>().reduceActionPoints((int)(Math.Abs(selected.GetComponent<Transform>().position.x - position.x) + Math.Abs(selected.GetComponent<Transform>().position.y - position.y)));
 						selected.GetComponent<MoveCharacter>().move(position.x, position.y);//Move GameObject to selected space
 						foreach(GameObject button in buttons)
 						{
@@ -80,10 +82,6 @@ public class CharacterTurnMove : MonoBehaviour
 				}
 
 			}
-			else if(Input.GetKeyDown("space"))//When space is pressed, selected character's turn is passed
-			{
-				selected.GetComponent<Stats>().reduceInitiative();
-			}
 		}
 		else if(selected.tag == "Character" && menu)
 		{
@@ -96,12 +94,20 @@ public class CharacterTurnMove : MonoBehaviour
 				menu = false;
 				buttonPressed = false;
 			}
+      else if(Input.GetKeyDown("escape"))
+      {
+        returnButton();
+      }
+      else if(Input.GetKeyDown("return"))
+      {
+        endButton();
+      }
 
 		}
 		else if(selected.tag == "Enemy")//Enemy movement code will go here in the future
 		{
 			Debug.Log("Blegh");
-			selected.GetComponent<Stats>().reduceInitiative();
+			selected.GetComponent<Character>().reduceInitiative();
 
 		}
 	}
@@ -129,7 +135,7 @@ public class CharacterTurnMove : MonoBehaviour
 			int greatestPosition = n;
 			for(int m = n+1; m < combatMembers.Length; m++)
 			{
-				if(combatMembers[m].GetComponent<Stats>().initiative > combatMembers[greatestPosition].GetComponent<Stats>().initiative)
+				if(combatMembers[m].GetComponent<Character>().initiative > combatMembers[greatestPosition].GetComponent<Character>().initiative)
 				{
 					greatestPosition = m;
 				}
@@ -144,7 +150,7 @@ public class CharacterTurnMove : MonoBehaviour
 
 	public void returnButton()
 	{
-    selected.GetComponent<Stats>().currentActionPoints = prevPoints;
+    selected.GetComponent<Character>().currentActionPoints = prevPoints;
 		selected.GetComponent<Transform>().position = prevPos;
 		buttonPressed = true;
 	}
@@ -152,7 +158,7 @@ public class CharacterTurnMove : MonoBehaviour
 	public void endButton()
 	{
     endTurn = true;
-    selected.GetComponent<Stats>().reduceActionPoints(selected.GetComponent<Stats>().currentActionPoints);
+    selected.GetComponent<Character>().reduceActionPoints(selected.GetComponent<Character>().currentActionPoints);
 		buttonPressed = true;
 	}
 }
