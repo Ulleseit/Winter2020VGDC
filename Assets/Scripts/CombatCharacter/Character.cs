@@ -4,10 +4,11 @@ using UnityEngine;
 
 public class Character : MonoBehaviour
 {
+    public string Cname;
     public int initiative;
     public int maxActionPoints;
     public int currentActionPoints;
-
+    public Sprite CharSprite;
     // Stats for combat
     public int health;
     public int armor; // low priority
@@ -37,6 +38,6 @@ public class Character : MonoBehaviour
       currentActionPoints -= n;
     }
     public string printStat(){
-    	return " Stats \n" + "initiative: " + initiative + "\nActionPoints: " + maxActionPoints + "\nhealth: " + health + "\narmor:" + armor + "\nstrength: " + strength + "\nmana: " + mana + "\naccuracy: " + accuracy + "evasion: " + evasion;
+    	return " Stats \n" + "initiative: " + initiative + "\nActionPoints: " + maxActionPoints + "\nhealth: " + health + "\narmor:" + armor + "\nstrength: " + strength + "\nmana: " + mana + "\naccuracy: " + accuracy + "\nevasion: " + evasion;
     }
 }

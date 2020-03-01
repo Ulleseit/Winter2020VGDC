@@ -6,7 +6,6 @@ using UnityEngine.UI;
 public class Skill : MonoBehaviour
 {
     public Button butt;
-    bool active = false;
     public void InteractOn(){
     	butt.interactable = true;
     }

@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class ShowTurnOrder : MonoBehaviour
 {
+    /*
     Text text;
     GameObject[] combatMembers;
 	public GameObject turnMoveHolder;
@@ -21,5 +22,6 @@ public class ShowTurnOrder : MonoBehaviour
           x += (combatMembers[i].name + " ");//Adds all ordered members of combat to string
         }
         text.text = x;//Lists which characters are taking their turns in which order
-    }
+    } 
+    */
 }
