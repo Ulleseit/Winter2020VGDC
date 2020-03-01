@@ -19,7 +19,6 @@ public class CharacterTurnMove : MonoBehaviour
     
 
     bool cameraLock = true;
-    bool cameraLock = true;
 
     void Start()
     {
@@ -165,5 +164,5 @@ public class CharacterTurnMove : MonoBehaviour
     selected.GetComponent<Character>().reduceActionPoints(selected.GetComponent<Character>().currentActionPoints);
 		buttonPressed = true;
 	}
-	*/
+	
 }
