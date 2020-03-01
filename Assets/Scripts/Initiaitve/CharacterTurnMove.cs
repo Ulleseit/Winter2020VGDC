@@ -5,7 +5,7 @@ using System;
 using UnityEngine.Tilemaps;
 
 public class CharacterTurnMove : MonoBehaviour
-{/*
+{
     GameObject[] characters;
     GameObject selected = null;
     GameObject[] enemies;
@@ -16,11 +16,11 @@ public class CharacterTurnMove : MonoBehaviour
     int prevPoints;
     Vector3 prevPos;
     bool endTurn = false;
-<<<<<<< HEAD
     
-=======
+
     bool cameraLock = true;
->>>>>>> 7b2345d66284130513fda34a5d3c8a2973329671
+    bool cameraLock = true;
+
     void Start()
     {
 		characters = GameObject.FindGameObjectsWithTag("Character");//Set up and update array of GameObjects that are player controlled
