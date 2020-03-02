@@ -16,36 +16,71 @@ public class CharacterTurnMove : MonoBehaviour
     int prevPoints;
     Vector3 prevPos;
     bool endTurn = false;
-    
+    public float minX;
+    public float maxX;
+    public float minY;
+    public float maxY;
 
     bool cameraLock = true;
-
+    float horizontalResolution = 1920;
     void Start()
     {
 		characters = GameObject.FindGameObjectsWithTag("Character");//Set up and update array of GameObjects that are player controlled
 		enemies = GameObject.FindGameObjectsWithTag("Enemy");//Set up and update array of GameObjects that are AI controlled
 		tilemap = this.GetComponent<Tilemap>();
+    float currentAspect = (float) Screen.width / (float) Screen.height;
+    Camera.main.orthographicSize = horizontalResolution / currentAspect / 400;
     }
     void Update()
     {
-    
+    Camera.main.transform.position = new Vector3(Mathf.Clamp(Camera.main.transform.position.x, minX, maxX), Mathf.Clamp(Camera.main.transform.position.y, minY, maxY), -10);
 		GameObject[] combatMembers = createCombatMembers();
-
+    selected = combatMembers[0];
 		Vector3 position = createTileMouse();
+    if(cameraLock)
+    {
+      Camera.main.transform.position = new Vector3(Mathf.Clamp(selected.GetComponent<Transform>().position.x, minX, maxX), Mathf.Clamp(selected.GetComponent<Transform>().position.y, minY, maxY), -10);
+      Camera.main.transform.position = new Vector3(Camera.main.transform.position.x, Camera.main.transform.position.y, -10);
 
-		selected = combatMembers[0];
+    }
+
+    if(Input.GetKey("w"))
+    {
+      Camera.main.transform.Translate(0, .1f, 0);
+      cameraLock = false;
+    }
+    else if(Input.GetKey("a"))
+    {
+      Camera.main.transform.Translate(-.1f, 0, 0);
+      cameraLock = false;
+    }
+    else if(Input.GetKey("s"))
+    {
+      Camera.main.transform.Translate(0, -.1f, 0);
+      cameraLock = false;
+    }
+    else if(Input.GetKey("d"))
+    {
+      Camera.main.transform.Translate(.1f, 0, 0);
+      cameraLock = false;
+    }
+    else if(Input.GetKeyDown("space"))
+    {
+      cameraLock = true;
+    }
+
 		if(selected.GetComponent<Character>().currentActionPoints == 0 && endTurn)//When are character reaches zero action points, the turn is ended, and action points refreshed
 		{
 			selected.GetComponent<Character>().reduceInitiative();
 			selected.GetComponent<Character>().currentActionPoints = selected.GetComponent<Character>().maxActionPoints;
       endTurn = false;
 		}
-
 		else if(selected.tag == "Character" && !menu)
 		{
 			if(Input.GetMouseButtonDown(0))//Check if Player is clicking with a selected character
 			{
 				//Movement Code
+        cameraLock = false;
 				if((int)(Math.Abs(selected.GetComponent<Transform>().position.x - position.x) + Math.Abs(selected.GetComponent<Transform>().position.y - position.y)) > selected.GetComponent<Character>().currentActionPoints)
 				{
 					Debug.Log("Too far to move!");
@@ -96,6 +131,7 @@ public class CharacterTurnMove : MonoBehaviour
 				}
 				menu = false;
 				buttonPressed = false;
+        cameraLock = true;
 			}
       else if(Input.GetKeyDown("escape"))
       {
@@ -164,5 +200,5 @@ public class CharacterTurnMove : MonoBehaviour
     selected.GetComponent<Character>().reduceActionPoints(selected.GetComponent<Character>().currentActionPoints);
 		buttonPressed = true;
 	}
-	
+
 }

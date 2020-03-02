@@ -5,7 +5,7 @@ using UnityEngine;
 public class tileHighlight : MonoBehaviour
 {
 	public GameObject highlight;
-	
+
     // Start is called before the first frame update
     void Start()
     {
@@ -18,7 +18,7 @@ public class tileHighlight : MonoBehaviour
       Vector3 position = createTileMouse();
 	  highlight.GetComponent<Transform>().position = position;
     }
-	
+
 	Vector3 createTileMouse()
 	{
 		Vector3 positionA = Camera.main.ScreenToWorldPoint(Input.mousePosition);
