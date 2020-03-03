@@ -11,6 +11,7 @@ public class Character : MonoBehaviour
     public Sprite CharSprite;
     // Stats for combat
     public int health;
+	public int currentHealth;
     public int armor; // low priority
     public int strength;
     public int mana; // low priority
