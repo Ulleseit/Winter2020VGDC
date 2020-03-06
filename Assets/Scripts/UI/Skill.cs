@@ -1,15 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
-public class Skill : MonoBehaviour
+public class Skill 
 {
-    public Button butt;
-    public void InteractOn(){
-    	butt.interactable = true;
-    }
-    public void InteractOff(){
-    	butt.interactable = false;
-    }
+	public int amount;
+	public bool active;
+	public string name;
+	public string description;
+	public Sprite sprite;
 }

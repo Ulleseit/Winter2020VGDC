@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using UnityEngine.EventSystems;
 
 public class MoveToNode : MonoBehaviour
 {
@@ -18,7 +19,7 @@ public class MoveToNode : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-      if(Input.GetMouseButtonDown(0))
+      if(Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject())
       {
         Vector3 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         pos.x = (float)(System.Math.Floor(pos.x)+.5);

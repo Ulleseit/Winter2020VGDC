@@ -4,18 +4,18 @@ using UnityEngine;
 
 public class CharacterHandler : MonoBehaviour
 {
-    public List<GameObject> CharactersList;
+    public List<Character> CharactersList;
     public GameObject myPrefab;
     public int current = 0; 
     // Start is called before the first frame update
     void Start()
     {
-        CharactersList = new List<GameObject>();
+        CharactersList = new List<Character>();
         createChar();
     }
     public void createChar()
     {
-    	GameObject character = Instantiate(myPrefab, new Vector3(0, 0, 0), Quaternion.identity);
+    	Character character = Instantiate(myPrefab, new Vector3(0, 0, 0), Quaternion.identity).GetComponent<Character>();
     	character.GetComponent<Character>().Cname = CharactersList.Count.ToString("0000");
     	CharactersList.Add(character);
     	Debug.Log(CharactersList.Count);
@@ -28,10 +28,10 @@ public class CharacterHandler : MonoBehaviour
         	current++;
         }
     }
-    public GameObject getCurrentChar(){
+    public Character getCurrentChar(){
     	return CharactersList[current];
     }
-    public List<GameObject> getList(){
+    public List<Character> getList(){
     	return CharactersList;
     }
 }
