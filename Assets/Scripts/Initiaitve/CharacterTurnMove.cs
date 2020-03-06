@@ -186,9 +186,21 @@ public class CharacterTurnMove : MonoBehaviour
 				endButton();
 			}
 		}
-		else if(selected.tag == "Enemy")//Enemy movement code will go here in the future
+		else if(selected.tag == "Enemy")
 		{
-			Debug.Log("Blegh");
+			float enemySquare = 10000f;
+      Vector3 enemyPosition = new Vector3(0,0,0);
+      foreach(GameObject c in characters)
+      {
+        if((Mathf.Abs(c.GetComponent<Transform>().position.x-selected.GetComponent<Transform>().position.x)+Mathf.Abs(c.GetComponent<Transform>().position.y-selected.GetComponent<Transform>().position.y)) < enemySquare)
+        {
+          enemySquare = (Mathf.Abs(c.GetComponent<Transform>().position.x-selected.GetComponent<Transform>().position.x)+Mathf.Abs(c.GetComponent<Transform>().position.y-selected.GetComponent<Transform>().position.y));
+          enemyPosition = c.GetComponent<Transform>().position;
+        }
+      }
+      //Check if any squares next to the thing are occupied, starting with the closest one
+      List<Point> p = stepTowardsPath(enemyPosition.x, enemyPosition.y);
+      StartCoroutine(stepThroughPath(p));
 			selected.GetComponent<Character>().reduceInitiative();
 
 		}
