@@ -6,7 +6,10 @@ public class Skill
 {
 	public int amount;
 	public bool active;
+	public bool unlocked;
 	public string name;
 	public string description;
 	public Sprite sprite;
+	
+
 }

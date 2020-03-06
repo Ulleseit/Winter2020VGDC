@@ -20,17 +20,20 @@ public class Character : MonoBehaviour
     
     public int NumSkill = 6;
     public bool[] SkillsActive = new bool[6];
-    public Skill[] SkillTree = new Skill[]
-    {
-	new Skill{ amount = 0, active = true, name = "1" , description = "1"}, // 0 RootSkill 
-	new Skill{ amount = 0, active = false, name = "2" , description = "2"}, // 1 leftSkillA 
-	new Skill{ amount = 0, active = false, name = "3" , description = "3"}, // 2 leftSkillB 
-	new Skill{ amount = 0, active = false, name = "4" , description = "4"}, // 3 RightSkillA 
-	new Skill{ amount = 0, active = false, name = "5" , description = "5"}, // 4 RightSkillB 
-	new Skill{ amount = 0, active = false, name = "6" , description = "6"} // 5 LastSkill 
-    };
+    public Skill[] SkillTree = new Skill[6];
 
-
+    public Character(){
+	SkillTree[0] = new Skill{ amount = 1, active = false, unlocked = true,name = "1" , description = "armor"}; // 0 RootSkill 
+	SkillTree[1] = new Skill{ amount = 2, active = false, unlocked = false,name = "2" , description = "strength"}; // 1 leftSkillA 
+	SkillTree[2] = new Skill{ amount = 3, active = false, unlocked = false,name = "3" , description = "mana"}; // 2 leftSkillB 
+	SkillTree[3] = new Skill{ amount = 4, active = false, unlocked = false,name = "4" , description = "accuracy"}; // 3 RightSkillA 
+	SkillTree[4] = new Skill{ amount = 5, active = false, unlocked = false,name = "5" , description = "evasion"}; // 4 RightSkillB 
+	SkillTree[5] = new Skill{ amount = 6, active = false, unlocked = false,name = "6" , description = "health"}; // 5 LastSkill 
+    	for(int i = 0; i < NumSkill; i++)
+	{
+	    SkillsActive[i] = false;
+	}
+    }
     
     public Item RHand;
     public Item LHand;
@@ -42,13 +45,26 @@ public class Character : MonoBehaviour
 	{
 	    SkillsActive[i] = false;
 	}
-	SkillsActive[0] = true;
     }
-    void Update()
-    {
-	for(int i = 0; i < NumSkill; i++)
-	{
-		SkillTree[i].active = SkillsActive[i];
+    public void activateSkill(int number){
+	if(SkillTree[number].active == false){    
+	    SkillTree[number].active = true;
+	    if(SkillTree[number].description == "initiative")
+	 	initiative += SkillTree[number].amount;
+	    if(SkillTree[number].description == "maxActionPoints")
+		maxActionPoints += SkillTree[number].amount;
+	    if(SkillTree[number].description == "health")
+	 	health += SkillTree[number].amount;
+	    if(SkillTree[number].description == "armor")
+	 	armor += SkillTree[number].amount;
+	    if(SkillTree[number].description == "strength")
+		strength += SkillTree[number].amount;
+	    if(SkillTree[number].description == "mana")
+		mana += SkillTree[number].amount;
+	    if(SkillTree[number].description == "accuracy")
+		accuracy += SkillTree[number].amount;	
+	    if(SkillTree[number].description == "evasion")
+		evasion += SkillTree[number].amount;				
 	}
     }
     public void reduceInitiative()//Used to reduce initiative at the end of the turn, should initiatives ever end up higher than 100, change value to minus 1000 unless high initiative means taking an extra turn

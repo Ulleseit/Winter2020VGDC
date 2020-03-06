@@ -449,7 +449,7 @@ public class CharacterTurnMove : MonoBehaviour
 			
 		}
 	}
-	
+	/*
 	void stepThroughPath(List<Point> path)
 	{
 		foreach(Point p in path)
@@ -457,5 +457,5 @@ public class CharacterTurnMove : MonoBehaviour
 			selected.GetComponent<Transform>().position = new Vector3(Mathf.Lerp((selected.GetComponent<Transform>().position.x, p.X, 1f), (selected.GetComponent<Transform>().position.y, 
 		}
 	}
-
+	*/
 }
