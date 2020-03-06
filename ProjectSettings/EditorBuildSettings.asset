@@ -5,22 +5,22 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/SampleScene.unity
     guid: 2cda990e2423bbf4892e6590ba056729
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Overworld_Map.unity
     guid: 6026aeaec3e439d4d8c1911a68ce6e48
   - enabled: 1
     path: Assets/Scenes/Combat.unity
     guid: b0662e328e5d743439ea66e3aa2d9899
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Town_menu.unity
     guid: d9cd6d03bbb5d6b4997ae3f6e890fb7b
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Menu.unity
     guid: 73e67d936b8bc5544933118f72628dd6
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Credits.unity
     guid: 64e98ccaf94d73b4a94a73849ec1c150
   m_configObjects: {}
