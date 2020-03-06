@@ -21,8 +21,8 @@ public class CharacterTurnMove : MonoBehaviour
     public float minY;
     public float maxY;
 	bool selectAttack = false;
+	bool selectSkill = false;
     bool cameraLock = true;
-    float horizontalResolution = 1920;
 	int range = 1;
 	public TileBase grassLandsAttack;
 	public TileBase mountainAttack;
@@ -33,59 +33,58 @@ public class CharacterTurnMove : MonoBehaviour
 		characters = GameObject.FindGameObjectsWithTag("Character");//Set up and update array of GameObjects that are player controlled
 		enemies = GameObject.FindGameObjectsWithTag("Enemy");//Set up and update array of GameObjects that are AI controlled
 		tilemap = this.GetComponent<Tilemap>();
-    float currentAspect = (float) Screen.width / (float) Screen.height;
-    Camera.main.orthographicSize = horizontalResolution / currentAspect / 400;
+		
     }
     void Update()
     {
-    Camera.main.transform.position = new Vector3(Mathf.Clamp(Camera.main.transform.position.x, minX, maxX), Mathf.Clamp(Camera.main.transform.position.y, minY, maxY), -10);
+		Camera.main.transform.position = new Vector3(Mathf.Clamp(Camera.main.transform.position.x, minX, maxX), Mathf.Clamp(Camera.main.transform.position.y, minY, maxY), -10);
 		GameObject[] combatMembers = createCombatMembers();
-    selected = combatMembers[0];
+		selected = combatMembers[0];
 		Vector3 position = createTileMouse();
-    if(cameraLock)
-    {
-      Camera.main.transform.position = new Vector3(Mathf.Clamp(selected.GetComponent<Transform>().position.x, minX, maxX), Mathf.Clamp(selected.GetComponent<Transform>().position.y, minY, maxY), -10);
-      Camera.main.transform.position = new Vector3(Camera.main.transform.position.x, Camera.main.transform.position.y, -10);
+		if(cameraLock)
+		{
+		  Camera.main.transform.position = new Vector3(Mathf.Clamp(selected.GetComponent<Transform>().position.x, minX, maxX), Mathf.Clamp(selected.GetComponent<Transform>().position.y, minY, maxY), -10);
+		  Camera.main.transform.position = new Vector3(Camera.main.transform.position.x, Camera.main.transform.position.y, -10);
 
-    }
+		}
 
-    if(Input.GetKey("w"))
-    {
-      Camera.main.transform.Translate(0, .1f, 0);
-      cameraLock = false;
-    }
-    else if(Input.GetKey("a"))
-    {
-      Camera.main.transform.Translate(-.1f, 0, 0);
-      cameraLock = false;
-    }
-    else if(Input.GetKey("s"))
-    {
-      Camera.main.transform.Translate(0, -.1f, 0);
-      cameraLock = false;
-    }
-    else if(Input.GetKey("d"))
-    {
-      Camera.main.transform.Translate(.1f, 0, 0);
-      cameraLock = false;
-    }
-    else if(Input.GetKeyDown("space"))
-    {
-      cameraLock = true;
-    }
+		if(Input.GetKey("w"))
+		{
+		  Camera.main.transform.Translate(0, .1f, 0);
+		  cameraLock = false;
+		}
+		else if(Input.GetKey("a"))
+		{
+		  Camera.main.transform.Translate(-.1f, 0, 0);
+		  cameraLock = false;
+		}
+		else if(Input.GetKey("s"))
+		{
+		  Camera.main.transform.Translate(0, -.1f, 0);
+		  cameraLock = false;
+		}
+		else if(Input.GetKey("d"))
+		{
+		  Camera.main.transform.Translate(.1f, 0, 0);
+		  cameraLock = false;
+		}
+		else if(Input.GetKeyDown("space"))
+		{
+		  cameraLock = true;
+		}
 
 		if(selected.GetComponent<Character>().currentActionPoints == 0 && endTurn)//When are character reaches zero action points, the turn is ended, and action points refreshed
 		{
 			selected.GetComponent<Character>().reduceInitiative();
 			selected.GetComponent<Character>().currentActionPoints = selected.GetComponent<Character>().maxActionPoints;
-      endTurn = false;
+			endTurn = false;
 		}
 		else if(selected.tag == "Character" && !menu)
 		{
 			if(Input.GetMouseButtonDown(0))//Check if Player is clicking with a selected character
 			{
 				//Movement Code
-        cameraLock = false;
+				cameraLock = false;
 				if((int)(Math.Abs(selected.GetComponent<Transform>().position.x - position.x) + Math.Abs(selected.GetComponent<Transform>().position.y - position.y)) > selected.GetComponent<Character>().currentActionPoints)
 				{
 					Debug.Log("Too far to move!");
@@ -93,11 +92,13 @@ public class CharacterTurnMove : MonoBehaviour
 				else
 				{
 					bool matching = false;//Initialize check
-					for(int x = 0; x < combatMembers.Length; x++)
+					RaycastHit hit;
+					Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+					if(Physics.Raycast(ray, out hit))
 					{
-						if(combatMembers[x].GetComponent<Transform>().position.x == position.x && combatMembers[x].GetComponent<Transform>().position.y == position.y && combatMembers[x] != selected)//Checks if any GameObjects are in the selected position to avoid collision
+						if(hit.transform != selected.transform)
 						{
-							matching = true;//If any GameObjects are in the position of selected movement location, change matching to true
+							matching = true;
 						}
 					}
 					if(matching)//If there is a GameObject in position, don't allow movement
@@ -107,9 +108,9 @@ public class CharacterTurnMove : MonoBehaviour
 
 					else if(!matching)
 					{
-            prevPoints = selected.GetComponent<Character>().currentActionPoints;
-            prevPos = selected.GetComponent<Transform>().position;
-            selected.GetComponent<Character>().reduceActionPoints((int)(Math.Abs(selected.GetComponent<Transform>().position.x - position.x) + Math.Abs(selected.GetComponent<Transform>().position.y - position.y)));
+						prevPoints = selected.GetComponent<Character>().currentActionPoints;
+						prevPos = selected.GetComponent<Transform>().position;
+						selected.GetComponent<Character>().reduceActionPoints((int)(Math.Abs(selected.GetComponent<Transform>().position.x - position.x) + Math.Abs(selected.GetComponent<Transform>().position.y - position.y)));
 						selected.GetComponent<MoveCharacter>().move(position.x, position.y);//Move GameObject to selected space
 						foreach(GameObject button in buttons)
 						{
@@ -117,16 +118,11 @@ public class CharacterTurnMove : MonoBehaviour
 						}
 						menu = true;
 					}
-					//End Movement Code
-					//Options Code
-
-					//End Options Code
-
 				}
 
 			}
 		}
-		else if(selected.tag == "Character" && menu && !selectAttack)
+		else if(selected.tag == "Character" && menu && !selectAttack && !selectSkill)
 		{
 			if(buttonPressed)
 			{
@@ -149,20 +145,42 @@ public class CharacterTurnMove : MonoBehaviour
 		  }
 
 		}
-		else if(selected.tag == "Character" && menu && selectAttack)
+		else if(selected.tag == "Character" && menu && selectSkill && !selectAttack)
+		{
+			Debug.Log("No skills yet sorry");
+			selectSkill = false;
+		}
+		else if(selected.tag == "Character" && menu && selectAttack && !selectSkill)
 		{
 			if(Input.GetMouseButtonDown(0) && (range == 1 && ((position.x == selected.GetComponent<Transform>().position.x+1 && position.y == selected.GetComponent<Transform>().position.y) || (position.x == selected.GetComponent<Transform>().position.x-1 && position.y == selected.GetComponent<Transform>().position.y) || (position.x == selected.GetComponent<Transform>().position.x && position.y == selected.GetComponent<Transform>().position.y+1) || (position.x == selected.GetComponent<Transform>().position.x && position.y == selected.GetComponent<Transform>().position.y-1))))
 			{
-				for(int x = 0; x < combatMembers.Length; x++)
-					{
-						if(combatMembers[x].GetComponent<Transform>().position.x == position.x && combatMembers[x].GetComponent<Transform>().position.y == position.y && combatMembers[x] != selected && combatMembers[x].tag == "Enemy")//Checks if any GameObjects are in the selected position to avoid collision
-						{
-							combatMembers[x].GetComponent<Character>().currentHealth = combatMembers[x].GetComponent<Character>().currentHealth - 1;
-							selectAttack = false;
-							endButton();
-						}
-						
-					}
+				RaycastHit hit;
+				Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+				if(Physics.Raycast(ray, out hit) && hit.transform.tag == "Enemy")
+				{
+					hit.transform.gameObject.GetComponent<Character>().currentHealth = hit.transform.gameObject.GetComponent<Character>().currentHealth - 1;
+					selectAttack = false;
+					endButton();
+				}
+			}
+			else if(Input.GetMouseButtonDown(0) && (range == 2 && ((position.x == selected.GetComponent<Transform>().position.x+1 && position.y == selected.GetComponent<Transform>().position.y) || (position.x == selected.GetComponent<Transform>().position.x-1 && position.y == selected.GetComponent<Transform>().position.y) || (position.x == selected.GetComponent<Transform>().position.x && position.y == selected.GetComponent<Transform>().position.y+1) || (position.x == selected.GetComponent<Transform>().position.x && position.y == selected.GetComponent<Transform>().position.y-1)) || (position.x == selected.GetComponent<Transform>().position.x && position.y == selected.GetComponent<Transform>().position.y-2) || (position.x == selected.GetComponent<Transform>().position.x && position.y == selected.GetComponent<Transform>().position.y+2) || (position.x == selected.GetComponent<Transform>().position.x+2 && position.y == selected.GetComponent<Transform>().position.y) || (position.x == selected.GetComponent<Transform>().position.x-2 && position.y == selected.GetComponent<Transform>().position.y) || (position.x == selected.GetComponent<Transform>().position.x+1 && position.y == selected.GetComponent<Transform>().position.y-1) || (position.x == selected.GetComponent<Transform>().position.x-1 && position.y == selected.GetComponent<Transform>().position.y-1) || (position.x == selected.GetComponent<Transform>().position.x-1 && position.y == selected.GetComponent<Transform>().position.y+1) || (position.x == selected.GetComponent<Transform>().position.x+1 && position.y == selected.GetComponent<Transform>().position.y+1)))
+			{
+				RaycastHit hit;
+				Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+				if(Physics.Raycast(ray, out hit) && hit.transform.tag == "Enemy")
+				{
+					hit.transform.gameObject.GetComponent<Character>().currentHealth = hit.transform.gameObject.GetComponent<Character>().currentHealth - 1;
+					selectAttack = false;
+					endButton();
+				}
+			}
+			else if(Input.GetKeyDown("escape"))
+			{
+				returnButton();
+			}
+			else if(Input.GetKeyDown("return"))
+			{
+				endButton();
 			}
 		}
 		else if(selected.tag == "Enemy")//Enemy movement code will go here in the future
@@ -215,33 +233,117 @@ public class CharacterTurnMove : MonoBehaviour
 			selectAttack = true;
 			if(range == 1)
 			{
-				Vector3Int tileLocOne = tilemap.WorldToCell(new Vector3(selected.GetComponent<Transform>().position.x+1, selected.GetComponent<Transform>().position.y, 0));
-				TileBase tempTileOne = tilemap.GetTile(tileLocOne);
-				if(tempTileOne.name == "grasslands")
+				Vector3Int tileLoc = tilemap.WorldToCell(new Vector3(selected.GetComponent<Transform>().position.x+1, selected.GetComponent<Transform>().position.y, 0));
+				TileBase tempTile = tilemap.GetTile(tileLoc);
+				if(tempTile.name == "grasslands")
 				{
-					tilemap.SetTile(tileLocOne, grassLandsAttack);
+					tilemap.SetTile(tileLoc, grassLandsAttack);
 				}
-				Vector3Int tileLocTwo = tilemap.WorldToCell(new Vector3(selected.GetComponent<Transform>().position.x-1, selected.GetComponent<Transform>().position.y, 0));
-				TileBase tempTileTwo = tilemap.GetTile(tileLocTwo);
-				if(tempTileTwo.name == "grasslands")
+				tileLoc = tilemap.WorldToCell(new Vector3(selected.GetComponent<Transform>().position.x-1, selected.GetComponent<Transform>().position.y, 0));
+				tempTile = tilemap.GetTile(tileLoc);
+				if(tempTile.name == "grasslands")
 				{
-					tilemap.SetTile(tileLocTwo, grassLandsAttack);
+					tilemap.SetTile(tileLoc, grassLandsAttack);
 				}
-				Vector3Int tileLocThree = tilemap.WorldToCell(new Vector3(selected.GetComponent<Transform>().position.x, selected.GetComponent<Transform>().position.y+1, 0));
-				TileBase tempTileThree = tilemap.GetTile(tileLocThree);
-				if(tempTileThree.name == "grasslands")
+				tileLoc = tilemap.WorldToCell(new Vector3(selected.GetComponent<Transform>().position.x, selected.GetComponent<Transform>().position.y+1, 0));
+				tempTile = tilemap.GetTile(tileLoc);
+				if(tempTile.name == "grasslands")
 				{
-					tilemap.SetTile(tileLocThree, grassLandsAttack);
+					tilemap.SetTile(tileLoc, grassLandsAttack);
 				}
-				Vector3Int tileLocFour = tilemap.WorldToCell(new Vector3(selected.GetComponent<Transform>().position.x, selected.GetComponent<Transform>().position.y-1, 0));
-				TileBase tempTileFour = tilemap.GetTile(tileLocFour);
-				if(tempTileFour.name == "grasslands")
+				tileLoc = tilemap.WorldToCell(new Vector3(selected.GetComponent<Transform>().position.x, selected.GetComponent<Transform>().position.y-1, 0));
+				tempTile = tilemap.GetTile(tileLoc);
+				if(tempTile.name == "grasslands")
 				{
-					tilemap.SetTile(tileLocFour, grassLandsAttack);
+					tilemap.SetTile(tileLoc, grassLandsAttack);
 				}
 
 				
 			}
+			else if(range == 2)
+			{
+				Vector3Int tileLoc = tilemap.WorldToCell(new Vector3(selected.GetComponent<Transform>().position.x+1, selected.GetComponent<Transform>().position.y, 0));
+				TileBase tempTile = tilemap.GetTile(tileLoc);
+				if(tempTile.name == "grasslands")
+				{
+					tilemap.SetTile(tileLoc, grassLandsAttack);
+				}
+				tileLoc = tilemap.WorldToCell(new Vector3(selected.GetComponent<Transform>().position.x-1, selected.GetComponent<Transform>().position.y, 0));
+				tempTile = tilemap.GetTile(tileLoc);
+				if(tempTile.name == "grasslands")
+				{
+					tilemap.SetTile(tileLoc, grassLandsAttack);
+				}
+				tileLoc = tilemap.WorldToCell(new Vector3(selected.GetComponent<Transform>().position.x, selected.GetComponent<Transform>().position.y+1, 0));
+				tempTile = tilemap.GetTile(tileLoc);
+				if(tempTile.name == "grasslands")
+				{
+					tilemap.SetTile(tileLoc, grassLandsAttack);
+				}
+				tileLoc = tilemap.WorldToCell(new Vector3(selected.GetComponent<Transform>().position.x, selected.GetComponent<Transform>().position.y-1, 0));
+				tempTile = tilemap.GetTile(tileLoc);
+				if(tempTile.name == "grasslands")
+				{
+					tilemap.SetTile(tileLoc, grassLandsAttack);
+				}
+				tileLoc = tilemap.WorldToCell(new Vector3(selected.GetComponent<Transform>().position.x+2, selected.GetComponent<Transform>().position.y, 0));
+				tempTile = tilemap.GetTile(tileLoc);
+				if(tempTile.name == "grasslands")
+				{
+					tilemap.SetTile(tileLoc, grassLandsAttack);
+				}
+				tileLoc = tilemap.WorldToCell(new Vector3(selected.GetComponent<Transform>().position.x-2, selected.GetComponent<Transform>().position.y, 0));
+				tempTile = tilemap.GetTile(tileLoc);
+				if(tempTile.name == "grasslands")
+				{
+					tilemap.SetTile(tileLoc, grassLandsAttack);
+				}
+				tileLoc = tilemap.WorldToCell(new Vector3(selected.GetComponent<Transform>().position.x, selected.GetComponent<Transform>().position.y+2, 0));
+				tempTile = tilemap.GetTile(tileLoc);
+				if(tempTile.name == "grasslands")
+				{
+					tilemap.SetTile(tileLoc, grassLandsAttack);
+				}
+				tileLoc = tilemap.WorldToCell(new Vector3(selected.GetComponent<Transform>().position.x, selected.GetComponent<Transform>().position.y-2, 0));
+				tempTile = tilemap.GetTile(tileLoc);
+				if(tempTile.name == "grasslands")
+				{
+					tilemap.SetTile(tileLoc, grassLandsAttack);
+				}
+				tileLoc = tilemap.WorldToCell(new Vector3(selected.GetComponent<Transform>().position.x+1, selected.GetComponent<Transform>().position.y+1, 0));
+				tempTile = tilemap.GetTile(tileLoc);
+				if(tempTile.name == "grasslands")
+				{
+					tilemap.SetTile(tileLoc, grassLandsAttack);
+				}
+				tileLoc = tilemap.WorldToCell(new Vector3(selected.GetComponent<Transform>().position.x+1, selected.GetComponent<Transform>().position.y-1, 0));
+				tempTile = tilemap.GetTile(tileLoc);
+				if(tempTile.name == "grasslands")
+				{
+					tilemap.SetTile(tileLoc, grassLandsAttack);
+				}
+				tileLoc = tilemap.WorldToCell(new Vector3(selected.GetComponent<Transform>().position.x-1, selected.GetComponent<Transform>().position.y+1, 0));
+				tempTile = tilemap.GetTile(tileLoc);
+				if(tempTile.name == "grasslands")
+				{
+					tilemap.SetTile(tileLoc, grassLandsAttack);
+				}
+				tileLoc = tilemap.WorldToCell(new Vector3(selected.GetComponent<Transform>().position.x-1, selected.GetComponent<Transform>().position.y-1, 0));
+				tempTile = tilemap.GetTile(tileLoc);
+				if(tempTile.name == "grasslands")
+				{
+					tilemap.SetTile(tileLoc, grassLandsAttack);
+				}
+				
+			}
+		}
+	}
+	
+	public void skillButton()
+	{
+		if(selected.GetComponent<Character>().currentActionPoints >= 2)
+		{
+			selectSkill = true;
 		}
 	}
 
