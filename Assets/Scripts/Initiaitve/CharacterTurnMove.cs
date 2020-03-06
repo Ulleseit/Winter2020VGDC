@@ -108,10 +108,17 @@ public class CharacterTurnMove : MonoBehaviour
 
 					else if(!matching)
 					{
-						prevPoints = selected.GetComponent<Character>().currentActionPoints;
 						prevPos = selected.GetComponent<Transform>().position;
+						/*
 						selected.GetComponent<Character>().reduceActionPoints((int)(Math.Abs(selected.GetComponent<Transform>().position.x - position.x) + Math.Abs(selected.GetComponent<Transform>().position.y - position.y)));
 						selected.GetComponent<MoveCharacter>().move(position.x, position.y);//Move GameObject to selected space
+						*/
+						Debug.Log("X: " + position.x + "Y: " + position.y);
+						List<Point> p = stepTowardsPath(position.x, position.y);
+						foreach(Point point in p)
+						{
+							Debug.Log("X:" + point.X + " Y:" + point.Y);
+						}
 						foreach(GameObject button in buttons)
 						{
 							button.SetActive(true);
@@ -349,7 +356,6 @@ public class CharacterTurnMove : MonoBehaviour
 
 	public void returnButton()
 	{
-		selected.GetComponent<Character>().currentActionPoints = prevPoints;
 		selected.GetComponent<Transform>().position = prevPos;
 		buttonPressed = true;
 		selectAttack = false;
@@ -387,6 +393,69 @@ public class CharacterTurnMove : MonoBehaviour
 			}
 		}
 		
+	}
+	
+	class Point
+	{
+		public float X;
+		public float Y;
+		public Point(float x, float y)
+		{
+			X = x;
+			Y = y;
+		}
+	}
+
+	List<Point> stepTowardsPath(float x, float y)
+	{
+		List<Point> path = new List<Point>();
+		int moves = selected.GetComponent<Character>().currentActionPoints;
+		float movingX = selected.GetComponent<Transform>().position.x;
+		float movingY = selected.GetComponent<Transform>().position.y;
+		while(true)
+		{
+			if(x > movingX && moves > 0)
+			{
+				Point tempPoint = new Point(movingX+1, movingY);
+				path.Add(tempPoint);
+				movingX++;
+				moves--;
+			}
+			else if(x < movingX && moves > 0)
+			{
+				Point tempPoint = new Point(movingX-1, movingY);
+				path.Add(tempPoint);
+				movingX--;
+				moves--;
+			}
+			else if(y > movingY && moves > 0)
+			{
+				Point tempPoint = new Point(movingX, movingY+1);
+				path.Add(tempPoint);
+				movingY++;
+				moves--;
+			}
+			else if(y < movingY && moves > 0)
+			{
+				Point tempPoint = new Point(movingX, movingY-1);
+				path.Add(tempPoint);
+				movingY--;
+				moves--;
+			}
+			else if(moves == 0 || (movingX == x && movingY == y))
+			{
+				return path;
+			}
+			
+		}
+	}
+	
+	void stepThroughPath(List<Point> path)
+	{
+		foreach(Point p in path)
+		{
+			selected.GetComponent<Transform>().position = new Vector3(Mathf.Lerp((selected.GetComponent<Transform>().position.x, p.X, 1f), (selected.GetComponent<Transform>().position.y, 
+		}
 	}
 
 }
