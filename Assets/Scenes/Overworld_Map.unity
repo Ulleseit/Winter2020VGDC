@@ -5890,7 +5890,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1207027397}
   m_Direction: 2
   m_Value: 0.99999905
-  m_Size: 0.5189499
+  m_Size: 0.51895
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -6435,7 +6435,7 @@ Canvas:
   m_GameObject: {fileID: 1525258024}
   m_Enabled: 1
   serializedVersion: 3
-  m_RenderMode: 1
+  m_RenderMode: 0
   m_Camera: {fileID: 657459937}
   m_PlaneDistance: 100
   m_PixelPerfect: 0
