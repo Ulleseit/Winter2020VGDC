@@ -49,26 +49,42 @@ public class Character : MonoBehaviour
 	    }
     }
 
-    public void activateSkill(int number){
+    public void activateSkill(int number)
+    {
 	    if (SkillTree[number].active == false)
         {    
 	        SkillTree[number].active = true;
-	        if (SkillTree[number].description == "initiative")
-	 	        initiative += SkillTree[number].amount;
-	        if (SkillTree[number].description == "maxActionPoints")
-		        maxActionPoints += SkillTree[number].amount;
-	        if (SkillTree[number].description == "health")
-	 	        health += SkillTree[number].amount;
-	        if (SkillTree[number].description == "armor")
-	 	        armor += SkillTree[number].amount;
-	        if (SkillTree[number].description == "strength")
-		        strength += SkillTree[number].amount;
-	        if (SkillTree[number].description == "mana")
-		        mana += SkillTree[number].amount;
-	        if (SkillTree[number].description == "accuracy")
-		        accuracy += SkillTree[number].amount;	
-	        if (SkillTree[number].description == "evasion")
-		        evasion += SkillTree[number].amount;				
+
+	        switch (SkillTree[number].description)
+            {
+                case "initiative":
+                    initiative += SkillTree[number].amount;
+                    break;
+                case "maxActionPoints":
+                    maxActionPoints += SkillTree[number].amount;
+                    break;
+                case "health":
+                    health += SkillTree[number].amount;
+                    break;
+                case "armor":
+                    armor += SkillTree[number].amount;
+                    break;
+                case "strength":
+                    strength += SkillTree[number].amount;
+                    break;
+                case "mana":
+                    mana += SkillTree[number].amount;
+                    break;
+                case "accuracy":
+                    accuracy += SkillTree[number].amount;
+                    break;
+                case "evasion":
+                    evasion += SkillTree[number].amount;
+                    break;
+                default:
+                    Debug.Log("Invalid description");
+                    break;
+            }			
 	    }
     }
 
@@ -82,7 +98,8 @@ public class Character : MonoBehaviour
       currentActionPoints -= n;
     }
 
-    public string printStat(){
+    public string printStat()
+    {
     	return " Stats \n" + "initiative: " + initiative + "\nActionPoints: " + maxActionPoints + "\nhealth: " + health + "\narmor:" + armor + "\nstrength: " + strength + "\nmana: " + mana + "\naccuracy: " + accuracy + "\nevasion: " + evasion;
     }
 }
