@@ -6,7 +6,7 @@ public class InventoryHandler : MonoBehaviour
 { 
  	public const int numItemSlot = 24;
 	private List<Item> ItemList;
-
+	public GameObject myPrefab;
 	void Start()
 	{
 		ItemList = new List<Item>();
@@ -16,8 +16,15 @@ public class InventoryHandler : MonoBehaviour
 		// AddItem(new Item { name = "Health Potion", itemType = Item.ItemType.Potion, amount = 5 });
 		// RemoveItem(new Item { name = "Sword", itemType = Item.ItemType.Weapon, amount = 1 });
 	}
-	
-    public void AddItem(Item item) 
+
+        public void CreateItem() 
+    	{
+    		Item item = Instantiate(myPrefab, new Vector3(0, 0, 0), Quaternion.identity).GetComponent<Item>();
+		item.GetComponent<Item>().name = ItemList.Count.ToString("0000");
+		ItemList.Add(item);
+    		Debug.Log(ItemList.Count);
+	}
+        public void AddItem(Item item) 
 	{
 		if (ItemList.Count <= numItemSlot)
 		{
@@ -29,6 +36,7 @@ public class InventoryHandler : MonoBehaviour
 		}
 		
 	}
+    
 
     public void RemoveItem (Item item)
     {
