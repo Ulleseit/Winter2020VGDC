@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using UnityEngine.EventSystems;
-
+using UnityEngine.SceneManagement;
 public class MoveToNode : MonoBehaviour
 {
     Tilemap tilemap;
@@ -57,10 +57,12 @@ public class MoveToNode : MonoBehaviour
       else if(r < 4.0f && r > 2.0f)
       {
         Debug.Log("Town");
+        SceneManager.LoadScene("Town_menu");
       }
       else
       {
         Debug.Log("Battle");
+        SceneManager.LoadScene("Combat");
       }
     }
 }
