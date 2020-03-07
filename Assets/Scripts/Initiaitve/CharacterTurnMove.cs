@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
@@ -20,22 +20,25 @@ public class CharacterTurnMove : MonoBehaviour
     public float maxX;
     public float minY;
     public float maxY;
-	bool selectAttack = false;
-	bool selectSkill = false;
+	  bool selectAttack = false;
+	  bool selectSkill = false;
     bool cameraLock = true;
-	int range = 1;
-	public TileBase grassLandsAttack;
-	public TileBase mountainAttack;
-	public TileBase grassLands;
-	public TileBase mountain;
+  	int range = 1;
+  	public TileBase grassLandsAttack;
+  	public TileBase mountainAttack;
+  	public TileBase grassLands;
+  	public TileBase mountain;
+    bool moving = false;
     void Start()
     {
 		characters = GameObject.FindGameObjectsWithTag("Character");//Set up and update array of GameObjects that are player controlled
 		enemies = GameObject.FindGameObjectsWithTag("Enemy");//Set up and update array of GameObjects that are AI controlled
 		tilemap = this.GetComponent<Tilemap>();
-		
+
     }
     void Update()
+    {
+    if(!moving)
     {
 		Camera.main.transform.position = new Vector3(Mathf.Clamp(Camera.main.transform.position.x, minX, maxX), Mathf.Clamp(Camera.main.transform.position.y, minY, maxY), -10);
 		GameObject[] combatMembers = createCombatMembers();
@@ -109,16 +112,9 @@ public class CharacterTurnMove : MonoBehaviour
 					else if(!matching)
 					{
 						prevPos = selected.GetComponent<Transform>().position;
-						/*
-						selected.GetComponent<Character>().reduceActionPoints((int)(Math.Abs(selected.GetComponent<Transform>().position.x - position.x) + Math.Abs(selected.GetComponent<Transform>().position.y - position.y)));
-						selected.GetComponent<MoveCharacter>().move(position.x, position.y);//Move GameObject to selected space
-						*/
-						Debug.Log("X: " + position.x + "Y: " + position.y);
+						prevPoints = selected.GetComponent<Character>().currentActionPoints;
 						List<Point> p = stepTowardsPath(position.x, position.y);
-						foreach(Point point in p)
-						{
-							Debug.Log("X:" + point.X + " Y:" + point.Y);
-						}
+            StartCoroutine(stepThroughPath(p));
 						foreach(GameObject button in buttons)
 						{
 							button.SetActive(true);
@@ -141,7 +137,7 @@ public class CharacterTurnMove : MonoBehaviour
 				buttonPressed = false;
 				cameraLock = true;
 			}
-		
+
 		  else if(Input.GetKeyDown("escape"))
 		  {
 			returnButton();
@@ -190,12 +186,25 @@ public class CharacterTurnMove : MonoBehaviour
 				endButton();
 			}
 		}
-		else if(selected.tag == "Enemy")//Enemy movement code will go here in the future
+		else if(selected.tag == "Enemy")
 		{
-			Debug.Log("Blegh");
+			float enemySquare = 10000f;
+      Vector3 enemyPosition = new Vector3(0,0,0);
+      foreach(GameObject c in characters)
+      {
+        if((Mathf.Abs(c.GetComponent<Transform>().position.x-selected.GetComponent<Transform>().position.x)+Mathf.Abs(c.GetComponent<Transform>().position.y-selected.GetComponent<Transform>().position.y)) < enemySquare)
+        {
+          enemySquare = (Mathf.Abs(c.GetComponent<Transform>().position.x-selected.GetComponent<Transform>().position.x)+Mathf.Abs(c.GetComponent<Transform>().position.y-selected.GetComponent<Transform>().position.y));
+          enemyPosition = c.GetComponent<Transform>().position;
+        }
+      }
+      //Check if any squares next to the thing are occupied, starting with the closest one
+      List<Point> p = stepTowardsPath(enemyPosition.x, enemyPosition.y);
+      StartCoroutine(stepThroughPath(p));
 			selected.GetComponent<Character>().reduceInitiative();
 
 		}
+    }
 	}
 
 	Vector3 createTileMouse()
@@ -232,9 +241,11 @@ public class CharacterTurnMove : MonoBehaviour
 		}
 		return combatMembers;
 	}
-	
+
 	public void attackButton()
 	{
+    if(!moving)
+    {
 		if(selected.GetComponent<Character>().currentActionPoints >= 2)
 		{
 			selectAttack = true;
@@ -265,7 +276,7 @@ public class CharacterTurnMove : MonoBehaviour
 					tilemap.SetTile(tileLoc, grassLandsAttack);
 				}
 
-				
+
 			}
 			else if(range == 2)
 			{
@@ -341,60 +352,75 @@ public class CharacterTurnMove : MonoBehaviour
 				{
 					tilemap.SetTile(tileLoc, grassLandsAttack);
 				}
-				
+
 			}
-		}
+    }
 	}
-	
+	}
+
 	public void skillButton()
 	{
+    if(!moving)
+    {
 		if(selected.GetComponent<Character>().currentActionPoints >= 2)
 		{
 			selectSkill = true;
 		}
+  }
 	}
 
 	public void returnButton()
 	{
+    if(!moving)
+    {
+    selected.GetComponent<Character>().currentActionPoints = prevPoints;
 		selected.GetComponent<Transform>().position = prevPos;
 		buttonPressed = true;
 		selectAttack = false;
 		resetMap();
+  }
 	}
 
 	public void endButton()
 	{
+    if(!moving)
+    {
 		endTurn = true;
 		selected.GetComponent<Character>().reduceActionPoints(selected.GetComponent<Character>().currentActionPoints);
 		buttonPressed = true;
 		selectAttack = false;
 		resetMap();
+  }
 	}
-	
+
 	void resetMap()
 	{
+
 		int tilemapWidth = tilemap.size.x;
 		int tilemapHeight = tilemap.size.y;
-		for(int width = -1; width < tilemapWidth-2; width++)
+		for(int width = tilemap.origin.x; width < tilemapWidth; width++)
 		{
-			for(int height = -1; height < tilemapHeight-2; height++)
+			for(int height = tilemap.origin.y; height < tilemapHeight; height++)
 			{
-				
+
 				Vector3Int replaceTile = new Vector3Int(width, height, 0);
 				TileBase checkTile = tilemap.GetTile(replaceTile);
-				if(checkTile.name == "grassland_tile_attack")
-				{
-					tilemap.SetTile(replaceTile, grassLands);
-				}
-				else if(checkTile.name == "mountain_tile_attack")
-				{
-					tilemap.SetTile(replaceTile, mountain);
-				}
+        if(checkTile != null)
+        {
+  				if(checkTile.name == "grassland_tile_attack")
+  				{
+  					tilemap.SetTile(replaceTile, grassLands);
+  				}
+  				else if(checkTile.name == "mountain_tile_attack")
+  				{
+  					tilemap.SetTile(replaceTile, mountain);
+  				}
+        }
 			}
 		}
-		
+
 	}
-	
+
 	class Point
 	{
 		public float X;
@@ -414,48 +440,150 @@ public class CharacterTurnMove : MonoBehaviour
 		float movingY = selected.GetComponent<Transform>().position.y;
 		while(true)
 		{
-			if(x > movingX && moves > 0)
+
+		  if(x > movingX && moves > 0)
 			{
-				Point tempPoint = new Point(movingX+1, movingY);
-				path.Add(tempPoint);
-				movingX++;
-				moves--;
+        if(tilemap.GetTile(tilemap.WorldToCell(new Vector3(movingX+1, movingY, 0))).name == "mountains")
+        {
+          if(y > movingY)
+          {
+            Point tempPoint = new Point(movingX, movingY+1);
+    				path.Add(tempPoint);
+    				movingY++;
+    				moves--;
+          }
+          else if(y < movingY)
+          {
+            Point tempPoint = new Point(movingX, movingY-1);
+    				path.Add(tempPoint);
+    				movingY++;
+    				moves--;
+          }
+          else
+          {
+            return path;
+          }
+        }
+        else
+        {
+  				Point tempPoint = new Point(movingX+1, movingY);
+  				path.Add(tempPoint);
+  				movingX++;
+  				moves--;
+        }
 			}
 			else if(x < movingX && moves > 0)
 			{
-				Point tempPoint = new Point(movingX-1, movingY);
-				path.Add(tempPoint);
-				movingX--;
-				moves--;
+        if(tilemap.GetTile(tilemap.WorldToCell(new Vector3(movingX-1, movingY, 0))).name == "mountains")
+        {
+          if(y > movingY)
+          {
+            Point tempPoint = new Point(movingX, movingY+1);
+    				path.Add(tempPoint);
+    				movingY++;
+    				moves--;
+          }
+          else if(y < movingY)
+          {
+            Point tempPoint = new Point(movingX, movingY-1);
+    				path.Add(tempPoint);
+    				movingY++;
+    				moves--;
+          }
+          else
+          {
+            return path;
+          }
+        }
+        else
+        {
+  				Point tempPoint = new Point(movingX-1, movingY);
+  				path.Add(tempPoint);
+  				movingX--;
+  				moves--;
+        }
 			}
 			else if(y > movingY && moves > 0)
 			{
-				Point tempPoint = new Point(movingX, movingY+1);
-				path.Add(tempPoint);
-				movingY++;
-				moves--;
+        if(tilemap.GetTile(tilemap.WorldToCell(new Vector3(movingX, movingY+1, 0))).name == "mountains")
+        {
+          if(x > movingX)
+          {
+            Point tempPoint = new Point(movingX+1, movingY);
+    				path.Add(tempPoint);
+    				movingY++;
+    				moves--;
+          }
+          else if(x < movingX)
+          {
+            Point tempPoint = new Point(movingX-1, movingY);
+    				path.Add(tempPoint);
+    				movingY++;
+    				moves--;
+          }
+          else
+          {
+            return path;
+          }
+        }
+        else
+        {
+  				Point tempPoint = new Point(movingX, movingY+1);
+  				path.Add(tempPoint);
+  				movingY++;
+  				moves--;
+        }
 			}
 			else if(y < movingY && moves > 0)
 			{
-				Point tempPoint = new Point(movingX, movingY-1);
-				path.Add(tempPoint);
-				movingY--;
-				moves--;
+        if(tilemap.GetTile(tilemap.WorldToCell(new Vector3(movingX, movingY-1, 0))).name == "mountains")
+        {
+          if(x > movingX)
+          {
+            Point tempPoint = new Point(movingX+1, movingY);
+    				path.Add(tempPoint);
+    				movingY++;
+    				moves--;
+          }
+          else if(x < movingX)
+          {
+            Point tempPoint = new Point(movingX-1, movingY);
+    				path.Add(tempPoint);
+    				movingY++;
+    				moves--;
+          }
+          else
+          {
+            return path;
+          }
+        }
+        else
+        {
+  				Point tempPoint = new Point(movingX, movingY-1);
+  				path.Add(tempPoint);
+  				movingY--;
+  				moves--;
+        }
 			}
 			else if(moves == 0 || (movingX == x && movingY == y))
 			{
 				return path;
 			}
-			
+
 		}
 	}
-	/*
-	void stepThroughPath(List<Point> path)
+
+	IEnumerator stepThroughPath(List<Point> path)
 	{
+    moving = true;
 		foreach(Point p in path)
 		{
-			selected.GetComponent<Transform>().position = new Vector3(Mathf.Lerp((selected.GetComponent<Transform>().position.x, p.X, 1f), (selected.GetComponent<Transform>().position.y, 
+			selected.GetComponent<Transform>().position = new Vector3(p.X, p.Y, 0f);
+      selected.GetComponent<Character>().reduceActionPoints(1);
+      yield return new WaitForSeconds(.25f);
 		}
+    moving = false;
 	}
-	*/
+
+
 }
