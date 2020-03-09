@@ -34,9 +34,6 @@ public class hoverInfo : MonoBehaviour
             prevHit = hit.transform.gameObject;
             boardBackground.transform.position = new Vector3(hit.transform.position.x, hit.transform.position.y+1, hit.transform.position.z);
             moved = true;
-            Debug.Log(hit.transform.gameObject.GetComponent<Character>().currentHealth);
-            Debug.Log(hit.transform.gameObject.GetComponent<Character>().health);
-            Debug.Log((float)(hit.transform.gameObject.GetComponent<Character>().currentHealth / (float)hit.transform.gameObject.GetComponent<Character>().health) * 100f );
             string x = ("Name: " + hit.transform.gameObject.name + "\nHealth: " + (int)(((float)hit.transform.gameObject.GetComponent<Character>().currentHealth / (float)hit.transform.gameObject.GetComponent<Character>().health) * 100f) + "%");
             text.text = x;
         }

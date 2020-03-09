@@ -48,7 +48,6 @@ public class CharacterTurnMove : MonoBehaviour
 		{
 		  Camera.main.transform.position = new Vector3(Mathf.Clamp(selected.GetComponent<Transform>().position.x, minX, maxX), Mathf.Clamp(selected.GetComponent<Transform>().position.y, minY, maxY), -10);
 		  Camera.main.transform.position = new Vector3(Camera.main.transform.position.x, Camera.main.transform.position.y, -10);
-
 		}
 
 		if(Input.GetKey("w"))
@@ -81,13 +80,14 @@ public class CharacterTurnMove : MonoBehaviour
 			selected.GetComponent<Character>().reduceInitiative();
 			selected.GetComponent<Character>().currentActionPoints = selected.GetComponent<Character>().maxActionPoints;
 			endTurn = false;
+      cameraLock = true;
 		}
 		else if(selected.tag == "Character" && !menu)
 		{
 			if(Input.GetMouseButtonDown(0))//Check if Player is clicking with a selected character
 			{
 				//Movement Code
-				cameraLock = false;
+				
 				if((int)(Math.Abs(selected.GetComponent<Transform>().position.x - position.x) + Math.Abs(selected.GetComponent<Transform>().position.y - position.y)) > selected.GetComponent<Character>().currentActionPoints)
 				{
 					Debug.Log("Too far to move!");
@@ -188,6 +188,10 @@ public class CharacterTurnMove : MonoBehaviour
 		}
 		else if(selected.tag == "Enemy")
 		{
+      foreach(GameObject button in buttons)
+      {
+        button.SetActive(false);
+      }
 			float enemySquare = 10000f;
       Vector3 enemyPosition = new Vector3(0,0,0);
       foreach(GameObject c in characters)
@@ -202,7 +206,6 @@ public class CharacterTurnMove : MonoBehaviour
       List<Point> p = stepTowardsPath(enemyPosition.x, enemyPosition.y);
       StartCoroutine(stepThroughPath(p));
 			selected.GetComponent<Character>().reduceInitiative();
-
 		}
     }
 	}
@@ -580,8 +583,17 @@ public class CharacterTurnMove : MonoBehaviour
 		{
 			selected.GetComponent<Transform>().position = new Vector3(p.X, p.Y, 0f);
       selected.GetComponent<Character>().reduceActionPoints(1);
+      if(cameraLock)
+  		{
+  		  Camera.main.transform.position = new Vector3(Mathf.Clamp(selected.GetComponent<Transform>().position.x, minX, maxX), Mathf.Clamp(selected.GetComponent<Transform>().position.y, minY, maxY), -10);
+  		  Camera.main.transform.position = new Vector3(Camera.main.transform.position.x, Camera.main.transform.position.y, -10);
+  		}
       yield return new WaitForSeconds(.25f);
 		}
+    if(selected.tag == "Enemy")
+    {
+      selected.GetComponent<Character>().currentActionPoints = selected.GetComponent<Character>().maxActionPoints;
+    }
     moving = false;
 	}
 
