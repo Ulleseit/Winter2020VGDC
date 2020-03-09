@@ -8,7 +8,7 @@ public class ShowTurnOrder : MonoBehaviour
 
     Text text;
     GameObject[] combatMembers;
-	public GameObject turnMoveHolder;
+	  public GameObject turnMoveHolder;
     void Start()
     {
       text = GetComponent<Text>();
@@ -23,5 +23,5 @@ public class ShowTurnOrder : MonoBehaviour
         }
         text.text = x;//Lists which characters are taking their turns in which order
     }
-    
+
 }
