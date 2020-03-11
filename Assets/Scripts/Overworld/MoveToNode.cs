@@ -27,7 +27,7 @@ public class MoveToNode : MonoBehaviour
         pos.z = 0;
         Vector3Int tileLocation = tilemap.WorldToCell(pos);//0,0 is the starting node location
         tile = tilemap.GetTile(tileLocation);
-        if((Equals(tile.name, "Node1") || Equals(tile.name, "Node2") ||Equals(tile.name, "Node3") ||Equals(tile.name, "Node4") ||Equals(tile.name, "Node5") ||Equals(tile.name, "Node6") ||Equals(tile.name, "Node7") ||Equals(tile.name, "Node8") ||Equals(tile.name, "Node9") ||Equals(tile.name, "Node10") ||Equals(tile.name, "Node11") ||Equals(tile.name, "Node12")) && (Next(pos)))
+        if((Equals(tile.name, "Node1") || Equals(tile.name, "Node2") ||Equals(tile.name, "Node3") ||Equals(tile.name, "Node4") ||Equals(tile.name, "Node5") ||Equals(tile.name, "Node6") ||Equals(tile.name, "Node7") ||Equals(tile.name, "Node8") ||Equals(tile.name, "Node9") ||Equals(tile.name, "Node10") ||Equals(tile.name, "Node11") ||Equals(tile.name, "Node12")) && checkPath(pos) && Next(pos))
         {
           pos.z = -10;
           Camera.main.transform.position = (pos);
@@ -46,6 +46,22 @@ public class MoveToNode : MonoBehaviour
       }
       return(move);
     }
+	
+	bool checkPath(Vector3 pos)
+	{
+		float pathx = (Camera.main.transform.position.x + pos.x)/2;
+		float pathy = (Camera.main.transform.position.y + pos.y)/2;
+		float pathz = pos.z;
+		Vector3 checkRoad = new Vector3(pathx, pathy, pathz);
+		Debug.Log(checkRoad);
+		Vector3Int tileLocation = tilemap.WorldToCell(checkRoad);
+        TileBase roadTile = tilemap.GetTile(tileLocation);
+		if(roadTile.name == "NodeConnectorUD" || roadTile.name == "NodeConnectorLR")
+		{
+			return true;
+		}
+		return false;
+	}
 
     void loadEvent()
     {
@@ -57,12 +73,12 @@ public class MoveToNode : MonoBehaviour
       else if(r < 4.0f && r > 2.0f)
       {
         Debug.Log("Town");
-        SceneManager.LoadScene("Town_menu");
+        //SceneManager.LoadScene("Town_menu");
       }
       else
       {
         Debug.Log("Battle");
-        SceneManager.LoadScene("Combat");
+        //SceneManager.LoadScene("Combat");
       }
     }
 }

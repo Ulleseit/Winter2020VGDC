@@ -82,7 +82,7 @@ public class CharacterTurnMove : MonoBehaviour
 			selected.GetComponent<Character>().reduceInitiative();
 			selected.GetComponent<Character>().currentActionPoints = selected.GetComponent<Character>().maxActionPoints;
 			endTurn = false;
-      cameraLock = true;
+			cameraLock = true;
 		}
 		else if(selected.tag == "Character" && !menu)
 		{
@@ -265,6 +265,7 @@ public class CharacterTurnMove : MonoBehaviour
 		return combatMembers;
 	}
 
+	
 	public void attackButton()
 	{
     if(!moving)
@@ -389,7 +390,7 @@ public class CharacterTurnMove : MonoBehaviour
 		{
 			selectSkill = true;
 		}
-  }
+	}
 	}
 
 	public void returnButton()
