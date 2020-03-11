@@ -30,6 +30,7 @@ public class CharacterTurnMove : MonoBehaviour
   	public TileBase grassLands;
   	public TileBase mountain;
     bool moving = false;
+	public GameObject chatText;
     void Start()
     {
 		characters = GameObject.FindGameObjectsWithTag("Character");//Set up and update array of GameObjects that are player controlled
@@ -163,6 +164,7 @@ public class CharacterTurnMove : MonoBehaviour
 				if(Physics.Raycast(ray, out hit) && hit.transform.tag == "Enemy")
 				{
 					hit.transform.gameObject.GetComponent<Character>().currentHealth = hit.transform.gameObject.GetComponent<Character>().currentHealth - 1;
+					chatText.GetComponent<textToChat>().processLine(selected.name + " dealt 1 damage to " + hit.transform.gameObject.name);
 					selectAttack = false;
 					endButton();
 				}
@@ -174,6 +176,7 @@ public class CharacterTurnMove : MonoBehaviour
 				if(Physics.Raycast(ray, out hit) && hit.transform.tag == "Enemy")
 				{
 					hit.transform.gameObject.GetComponent<Character>().currentHealth = hit.transform.gameObject.GetComponent<Character>().currentHealth - 1;
+					chatText.GetComponent<textToChat>().processLine(selected.name + " dealt 1 damage to " + hit.transform.gameObject.name);
 					selectAttack = false;
 					endButton();
 				}
@@ -612,18 +615,22 @@ public class CharacterTurnMove : MonoBehaviour
 		if(selected.GetComponent<Character>().currentActionPoints >= 2 && !checkCharacterOccupancy(new Vector3(selected.transform.position.x+1, selected.transform.position.y, selected.transform.position.z)).Item1)
 		{
 			checkCharacterOccupancy(new Vector3(selected.transform.position.x+1, selected.transform.position.y, selected.transform.position.z)).Item2.GetComponent<Character>().currentHealth--;
+			chatText.GetComponent<textToChat>().processLine(selected.name + " dealt 1 damage to " + checkCharacterOccupancy(new Vector3(selected.transform.position.x+1, selected.transform.position.y, selected.transform.position.z)).Item2.name);
 		}
 		else if(selected.GetComponent<Character>().currentActionPoints >= 2 && !checkCharacterOccupancy(new Vector3(selected.transform.position.x-1, selected.transform.position.y, selected.transform.position.z)).Item1)
 		{
 			checkCharacterOccupancy(new Vector3(selected.transform.position.x-1, selected.transform.position.y, selected.transform.position.z)).Item2.GetComponent<Character>().currentHealth--;
+			chatText.GetComponent<textToChat>().processLine(selected.name + " dealt 1 damage to " + checkCharacterOccupancy(new Vector3(selected.transform.position.x-1, selected.transform.position.y, selected.transform.position.z)).Item2.name);
 		}
 		else if(selected.GetComponent<Character>().currentActionPoints >= 2 && !checkCharacterOccupancy(new Vector3(selected.transform.position.x, selected.transform.position.y+1, selected.transform.position.z)).Item1)
 		{
 			checkCharacterOccupancy(new Vector3(selected.transform.position.x, selected.transform.position.y+1, selected.transform.position.z)).Item2.GetComponent<Character>().currentHealth--;
+			chatText.GetComponent<textToChat>().processLine(selected.name + " dealt 1 damage to " + checkCharacterOccupancy(new Vector3(selected.transform.position.x, selected.transform.position.y+1, selected.transform.position.z)).Item2.name);
 		}
 		else if(selected.GetComponent<Character>().currentActionPoints >= 2 && !checkCharacterOccupancy(new Vector3(selected.transform.position.x, selected.transform.position.y-1, selected.transform.position.z)).Item1)
 		{
 			checkCharacterOccupancy(new Vector3(selected.transform.position.x, selected.transform.position.y-1, selected.transform.position.z)).Item2.GetComponent<Character>().currentHealth--;
+			chatText.GetComponent<textToChat>().processLine(selected.name + " dealt 1 damage to " + checkCharacterOccupancy(new Vector3(selected.transform.position.x, selected.transform.position.y-1, selected.transform.position.z)).Item2.name);
 		}
 		
 		selected.GetComponent<Character>().currentActionPoints = selected.GetComponent<Character>().maxActionPoints;
@@ -635,7 +642,7 @@ public class CharacterTurnMove : MonoBehaviour
 	{
 		foreach(GameObject s in combatMembers)
 		{
-			if(s.transform.position == checkPosition)
+			if(s.transform.position == checkPosition && s != selected)
 			{
 				return false;
 			}
