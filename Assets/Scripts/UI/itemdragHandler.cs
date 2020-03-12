@@ -21,15 +21,10 @@ public class itemdragHandler : MonoBehaviour , IDragHandler, IEndDragHandler
 
 	pointerEventData.position = Input.mousePosition;
     	
-    	for (int i = 0; i < results.Count; i++)
-	{
-	    Debug.Log(results[i].gameObject.name + " " + i);
-	}
 	
     	foreach (var hit in results)
 	{
 	    // If we found slot.
-	    Debug.Log(hit.gameObject.tag);
 	    var slot = hit.gameObject.GetComponent<UIItem>();
 	    if(hit.gameObject.tag == "ItemSlot")
 	    {
