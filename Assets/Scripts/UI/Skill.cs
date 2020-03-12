@@ -9,6 +9,7 @@ public class Skill
 	public bool unlocked;
 	public string name;
 	public string description;
+	public CharacterStats statModifier;
 	public Sprite sprite;
 	
 
