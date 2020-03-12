@@ -25,15 +25,11 @@ public class textToChat : MonoBehaviour
 	{
 		x += (y + "\n");
 		curLines += 1;
-		Debug.Log(curLines);
-		Debug.Log(maxLines);
 		if(curLines > maxLines)
 		{	
-			Debug.Log(x);
 			int i = x.IndexOf("\n");
 			x = x.Substring(i+1);
 			curLines -= 1;
-			Debug.Log(x);
 		}
 		text.text = x;
 	}
