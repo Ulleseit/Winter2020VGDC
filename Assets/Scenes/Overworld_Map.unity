@@ -7032,7 +7032,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1207027398}
   m_HandleRect: {fileID: 1207027397}
   m_Direction: 2
-  m_Value: 0.999999
+  m_Value: 0.99999905
   m_Size: 0.51895
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -12202,6 +12202,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 84e8200eb0829d38cbe0ad36675859a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  overWorldCamera: {fileID: 657459935}
+  overWorldCanvas: {fileID: 1525258024}
 --- !u!224 &1881930498 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 5463424163839294791, guid: 39ad955a49356a3458f28f13ca91ea23,

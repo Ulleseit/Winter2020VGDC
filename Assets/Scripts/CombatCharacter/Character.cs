@@ -19,6 +19,7 @@ public class Character : MonoBehaviour
     public int mana; // low priority
     public int accuracy; // low priority
     public int evasion; // low priority
+	public int damage;
 
     public int NumSkill = 6;
     public bool[] SkillsActive = new bool[6];
@@ -49,9 +50,18 @@ public class Character : MonoBehaviour
         {
             SkillsActive[i] = false;
         }
-		health = 10 + 5*level;
-		currentHealth = health;
-		strength = 5 + 5*level;
+		if(gameObject.name == "Spider")
+		{
+			health = 8;
+			currentHealth = health;
+			damage = 4;
+		}
+		else
+		{
+			health = 10 + 5*level;
+			currentHealth = health;
+			strength = 5 + 5*level;
+		}
     }
 
     public void activateSkill(int number)

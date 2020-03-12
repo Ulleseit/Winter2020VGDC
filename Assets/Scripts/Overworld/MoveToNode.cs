@@ -10,6 +10,8 @@ public class MoveToNode : MonoBehaviour
     Tilemap tilemap;
     TileBase tile;
     List<(float, float)> tupleList = new List<(float, float)>{};
+	public GameObject overWorldCamera;
+	public GameObject overWorldCanvas;
     // Start is called before the first frame update
     void Start()
     {
@@ -78,7 +80,9 @@ public class MoveToNode : MonoBehaviour
       else
       {
         Debug.Log("Battle");
-        //SceneManager.LoadScene("Combat");
+        SceneManager.LoadScene("combat1", LoadSceneMode.Additive);
+		overWorldCamera.SetActive(false);
+		overWorldCanvas.SetActive(false);
       }
     }
 }
