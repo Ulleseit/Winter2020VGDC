@@ -2920,7 +2920,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1322691379}
+      - m_Target: {fileID: 0}
         m_MethodName: changeChar
         m_Mode: 1
         m_Arguments:
@@ -2989,6 +2989,7 @@ GameObject:
   - component: {fileID: 657459938}
   - component: {fileID: 657459937}
   - component: {fileID: 657459936}
+  - component: {fileID: 657459939}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -3061,6 +3062,22 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &657459939
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 657459935}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 493b3a567b0b609418fddefd96fba120, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CharactersList: []
+  myPrefab: {fileID: 7546663147784155555, guid: 26c48dc2769f2f841b96841413c40497,
+    type: 3}
+  current: 0
 --- !u!1 &666592117
 GameObject:
   m_ObjectHideFlags: 0
@@ -4395,7 +4412,7 @@ PrefabInstance:
         type: 3}
       propertyPath: characterArray
       value: 
-      objectReference: {fileID: 1322691379}
+      objectReference: {fileID: 657459939}
     - target: {fileID: 7315081478811818362, guid: 398fc09452b99f34f9c855f5a84f1e16,
         type: 3}
       propertyPath: number
@@ -4604,7 +4621,7 @@ PrefabInstance:
         type: 3}
       propertyPath: characterArray
       value: 
-      objectReference: {fileID: 1322691379}
+      objectReference: {fileID: 657459939}
     - target: {fileID: 7315081478811818362, guid: 398fc09452b99f34f9c855f5a84f1e16,
         type: 3}
       propertyPath: number
@@ -4823,7 +4840,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Message: {fileID: 993369017}
-  Character: {fileID: 1322691375}
+  Character: {fileID: 657459935}
 --- !u!114 &993369017
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5093,7 +5110,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ec63a0771be329544960b5e2b9386295, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CharArray: {fileID: 1322691375}
+  CharArray: {fileID: 657459935}
 --- !u!114 &1095888236 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7315081478811818362, guid: 398fc09452b99f34f9c855f5a84f1e16,
@@ -5252,7 +5269,7 @@ PrefabInstance:
         type: 3}
       propertyPath: characterArray
       value: 
-      objectReference: {fileID: 1322691379}
+      objectReference: {fileID: 657459939}
     - target: {fileID: 7315081478811818362, guid: 398fc09452b99f34f9c855f5a84f1e16,
         type: 3}
       propertyPath: number
@@ -5727,7 +5744,6 @@ GameObject:
   - component: {fileID: 1322691376}
   - component: {fileID: 1322691378}
   - component: {fileID: 1322691377}
-  - component: {fileID: 1322691379}
   m_Layer: 5
   m_Name: CharacterArray
   m_TagString: Untagged
@@ -5792,22 +5808,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1322691375}
   m_CullTransparentMesh: 0
---- !u!114 &1322691379
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1322691375}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 493b3a567b0b609418fddefd96fba120, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  CharactersList: []
-  myPrefab: {fileID: 7546663147784155555, guid: 26c48dc2769f2f841b96841413c40497,
-    type: 3}
-  current: 0
 --- !u!1 &1328547592
 GameObject:
   m_ObjectHideFlags: 0
@@ -5889,7 +5889,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1207027398}
   m_HandleRect: {fileID: 1207027397}
   m_Direction: 2
-  m_Value: 0.99999905
+  m_Value: 0.999999
   m_Size: 0.51895
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -10447,7 +10447,7 @@ PrefabInstance:
         type: 3}
       propertyPath: characterArray
       value: 
-      objectReference: {fileID: 1322691379}
+      objectReference: {fileID: 657459939}
     - target: {fileID: 7315081478811818362, guid: 398fc09452b99f34f9c855f5a84f1e16,
         type: 3}
       propertyPath: number
@@ -10656,7 +10656,7 @@ PrefabInstance:
         type: 3}
       propertyPath: characterArray
       value: 
-      objectReference: {fileID: 1322691379}
+      objectReference: {fileID: 657459939}
     - target: {fileID: 7315081478811818362, guid: 398fc09452b99f34f9c855f5a84f1e16,
         type: 3}
       propertyPath: number
@@ -11030,7 +11030,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1322691379}
+      - m_Target: {fileID: 0}
         m_MethodName: createChar
         m_Mode: 1
         m_Arguments:
@@ -11103,7 +11103,7 @@ PrefabInstance:
         type: 3}
       propertyPath: characterArray
       value: 
-      objectReference: {fileID: 1322691379}
+      objectReference: {fileID: 657459939}
     - target: {fileID: 7315081478811818362, guid: 398fc09452b99f34f9c855f5a84f1e16,
         type: 3}
       propertyPath: unlockOne
