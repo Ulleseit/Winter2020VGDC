@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 public class InventoryHandler : MonoBehaviour
 { 
- 	public const int numItemSlot = 12;
+ 	public const int numItemSlot = 24;
 	private List<Item> ItemList;
 	public GameObject myPrefab;
 	void Start()
