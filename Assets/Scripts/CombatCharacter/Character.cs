@@ -11,15 +11,8 @@ public class Character : MonoBehaviour
     public int maxActionPoints = 5;
     public int currentActionPoints = 5;
     public Sprite CharSprite;
-    // Stats for combat
-    public int health;
-    public int currentHealth;
-    public int armor; // low priority
-    public int strength;
-    public int mana; // low priority
-    public int accuracy; // low priority
-    public int evasion; // low priority
-	public int damage;
+
+    public CharacterStats stats = new CharacterStats();
 
     public int NumSkill = 6;
     public bool[] SkillsActive = new bool[6];
@@ -27,12 +20,12 @@ public class Character : MonoBehaviour
 
     public Character()
     {
-        SkillTree[0] = new Skill { amount = 1, active = false, unlocked = true, name = "1", description = "armor" }; // 0 RootSkill 
-        SkillTree[1] = new Skill { amount = 2, active = false, unlocked = false, name = "2", description = "strength" }; // 1 leftSkillA 
-        SkillTree[2] = new Skill { amount = 3, active = false, unlocked = false, name = "3", description = "mana" }; // 2 leftSkillB 
-        SkillTree[3] = new Skill { amount = 4, active = false, unlocked = false, name = "4", description = "accuracy" }; // 3 RightSkillA 
-        SkillTree[4] = new Skill { amount = 5, active = false, unlocked = false, name = "5", description = "evasion" }; // 4 RightSkillB 
-        SkillTree[5] = new Skill { amount = 6, active = false, unlocked = false, name = "6", description = "health" }; // 5 LastSkill 
+        SkillTree[0] = new Skill { amount = 1, active = false, unlocked = true, name = "1", description = "armor", statModifier = new CharacterStats(armor: 1) }; // 0 RootSkill 
+        SkillTree[1] = new Skill { amount = 2, active = false, unlocked = false, name = "2", description = "strength", statModifier = new CharacterStats(strength: 2) }; // 1 leftSkillA 
+        SkillTree[2] = new Skill { amount = 3, active = false, unlocked = false, name = "3", description = "mana", statModifier = new CharacterStats(mana: 3) }; // 2 leftSkillB 
+        SkillTree[3] = new Skill { amount = 4, active = false, unlocked = false, name = "4", description = "accuracy", statModifier = new CharacterStats(accuracy: 4) }; // 3 RightSkillA 
+        SkillTree[4] = new Skill { amount = 5, active = false, unlocked = false, name = "5", description = "evasion", statModifier = new CharacterStats(evasion: 5) }; // 4 RightSkillB 
+        SkillTree[5] = new Skill { amount = 6, active = false, unlocked = false, name = "6", description = "health", statModifier = new CharacterStats(health: 6) }; // 5 LastSkill 
 
         for (int i = 0; i < NumSkill; i++)
         {
@@ -40,9 +33,9 @@ public class Character : MonoBehaviour
         }
     }
 
-    public Item RHand = new Item { itemType = Item.ItemType.None, stats = new Item.Stats() };
-    public Item LHand = new Item { itemType = Item.ItemType.None, stats = new Item.Stats() };
-    public Item Armor = new Item { itemType = Item.ItemType.None, stats = new Item.Stats() };
+    public Item RHand = new Item { itemType = Item.ItemType.Weapon, stats = new CharacterStats() };
+    public Item LHand = new Item { itemType = Item.ItemType.Weapon, stats = new CharacterStats() };
+    public Item Armor = new Item { itemType = Item.ItemType.Weapon, stats = new CharacterStats() };
 
     void Start()
     {
@@ -52,15 +45,15 @@ public class Character : MonoBehaviour
         }
 		if(gameObject.name == "Spider")
 		{
-			health = 8;
-			currentHealth = health;
-			damage = 4;
+			stats.health = 8;
+			stats.currentHealth = stats.health;
+			stats.damage = 4;
 		}
 		else
 		{
-			health = 10 + 5*level;
-			currentHealth = health;
-			strength = 5 + 5*level;
+			stats.health = 10 + 5*level;
+			stats.currentHealth = stats.health;
+			stats.strength = 5 + 5*level;
 		}
     }
 
@@ -70,36 +63,7 @@ public class Character : MonoBehaviour
         {
             SkillTree[number].active = true;
 
-            switch (SkillTree[number].description)
-            {
-                case "initiative":
-                    initiative += SkillTree[number].amount;
-                    break;
-                case "maxActionPoints":
-                    maxActionPoints += SkillTree[number].amount;
-                    break;
-                case "health":
-                    health += SkillTree[number].amount;
-                    break;
-                case "armor":
-                    armor += SkillTree[number].amount;
-                    break;
-                case "strength":
-                    strength += SkillTree[number].amount;
-                    break;
-                case "mana":
-                    mana += SkillTree[number].amount;
-                    break;
-                case "accuracy":
-                    accuracy += SkillTree[number].amount;
-                    break;
-                case "evasion":
-                    evasion += SkillTree[number].amount;
-                    break;
-                default:
-                    Debug.Log("Invalid description");
-                    break;
-            }
+            stats += SkillTree[number].statModifier;
         }
     }
 
@@ -136,12 +100,7 @@ public class Character : MonoBehaviour
                 return;
         }
 
-        health += item.stats.health;
-        armor += item.stats.armor;
-        strength += item.stats.strength;
-        mana += item.stats.mana;
-        accuracy += item.stats.accuracy;
-        evasion += item.stats.evasion;
+        stats += item.stats;
     }
 
     public void unequipItem(string slot)
@@ -149,31 +108,16 @@ public class Character : MonoBehaviour
         switch (slot)
         {
             case "rhand":
-                health -= RHand.stats.health;
-                armor -= RHand.stats.armor;
-                strength -= RHand.stats.strength;
-                mana -= RHand.stats.mana;
-                accuracy -= RHand.stats.accuracy;
-                evasion -= RHand.stats.evasion;
-                RHand = new Item { itemType = Item.ItemType.None, stats = new Item.Stats() };
+                stats -= RHand.stats;
+                RHand = new Item { itemType = Item.ItemType.Weapon, stats = new CharacterStats() };
                 break;
             case "lhand":
-                health -= LHand.stats.health;
-                armor -= LHand.stats.armor;
-                strength -= LHand.stats.strength;
-                mana -= LHand.stats.mana;
-                accuracy -= LHand.stats.accuracy;
-                evasion -= LHand.stats.evasion;
-                LHand = new Item { itemType = Item.ItemType.None, stats = new Item.Stats() };
+                stats -= LHand.stats;
+                LHand = new Item { itemType = Item.ItemType.Weapon, stats = new CharacterStats() };
                 break;
             case "armor":
-                health -= Armor.stats.health;
-                armor -= Armor.stats.armor;
-                strength -= Armor.stats.strength;
-                mana -= Armor.stats.mana;
-                accuracy -= Armor.stats.accuracy;
-                evasion -= Armor.stats.evasion;
-                Armor = new Item { itemType = Item.ItemType.None, stats = new Item.Stats() };
+                stats -= Armor.stats;
+                Armor = new Item { itemType = Item.ItemType.Weapon, stats = new CharacterStats() };
                 break;
             default:
                 Debug.Log("Invalid slot");
