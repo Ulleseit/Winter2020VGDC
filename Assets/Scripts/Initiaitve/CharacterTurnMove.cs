@@ -9,6 +9,7 @@ public class CharacterTurnMove : MonoBehaviour
     GameObject[] characters;
     GameObject selected = null;
     GameObject[] enemies;
+	GameObject[] combatMembers;
   	Tilemap tilemap;
   	public GameObject[] buttons;
   	bool buttonPressed = false;
@@ -29,6 +30,7 @@ public class CharacterTurnMove : MonoBehaviour
   	public TileBase grassLands;
   	public TileBase mountain;
     bool moving = false;
+	public GameObject chatText;
     void Start()
     {
 		characters = GameObject.FindGameObjectsWithTag("Character");//Set up and update array of GameObjects that are player controlled
@@ -41,14 +43,13 @@ public class CharacterTurnMove : MonoBehaviour
     if(!moving)
     {
 		Camera.main.transform.position = new Vector3(Mathf.Clamp(Camera.main.transform.position.x, minX, maxX), Mathf.Clamp(Camera.main.transform.position.y, minY, maxY), -10);
-		GameObject[] combatMembers = createCombatMembers();
+		combatMembers = createCombatMembers();
 		selected = combatMembers[0];
 		Vector3 position = createTileMouse();
 		if(cameraLock)
 		{
 		  Camera.main.transform.position = new Vector3(Mathf.Clamp(selected.GetComponent<Transform>().position.x, minX, maxX), Mathf.Clamp(selected.GetComponent<Transform>().position.y, minY, maxY), -10);
 		  Camera.main.transform.position = new Vector3(Camera.main.transform.position.x, Camera.main.transform.position.y, -10);
-
 		}
 
 		if(Input.GetKey("w"))
@@ -81,13 +82,14 @@ public class CharacterTurnMove : MonoBehaviour
 			selected.GetComponent<Character>().reduceInitiative();
 			selected.GetComponent<Character>().currentActionPoints = selected.GetComponent<Character>().maxActionPoints;
 			endTurn = false;
+			cameraLock = true;
 		}
 		else if(selected.tag == "Character" && !menu)
 		{
 			if(Input.GetMouseButtonDown(0))//Check if Player is clicking with a selected character
 			{
 				//Movement Code
-				cameraLock = false;
+				
 				if((int)(Math.Abs(selected.GetComponent<Transform>().position.x - position.x) + Math.Abs(selected.GetComponent<Transform>().position.y - position.y)) > selected.GetComponent<Character>().currentActionPoints)
 				{
 					Debug.Log("Too far to move!");
@@ -162,6 +164,7 @@ public class CharacterTurnMove : MonoBehaviour
 				if(Physics.Raycast(ray, out hit) && hit.transform.tag == "Enemy")
 				{
 					hit.transform.gameObject.GetComponent<Character>().currentHealth = hit.transform.gameObject.GetComponent<Character>().currentHealth - 1;
+					chatText.GetComponent<textToChat>().processLine(selected.name + " dealt 1 damage to " + hit.transform.gameObject.name);
 					selectAttack = false;
 					endButton();
 				}
@@ -173,6 +176,7 @@ public class CharacterTurnMove : MonoBehaviour
 				if(Physics.Raycast(ray, out hit) && hit.transform.tag == "Enemy")
 				{
 					hit.transform.gameObject.GetComponent<Character>().currentHealth = hit.transform.gameObject.GetComponent<Character>().currentHealth - 1;
+					chatText.GetComponent<textToChat>().processLine(selected.name + " dealt 1 damage to " + hit.transform.gameObject.name);
 					selectAttack = false;
 					endButton();
 				}
@@ -188,21 +192,40 @@ public class CharacterTurnMove : MonoBehaviour
 		}
 		else if(selected.tag == "Enemy")
 		{
+			foreach(GameObject button in buttons)
+			{
+				button.SetActive(false);
+			}
 			float enemySquare = 10000f;
-      Vector3 enemyPosition = new Vector3(0,0,0);
-      foreach(GameObject c in characters)
-      {
-        if((Mathf.Abs(c.GetComponent<Transform>().position.x-selected.GetComponent<Transform>().position.x)+Mathf.Abs(c.GetComponent<Transform>().position.y-selected.GetComponent<Transform>().position.y)) < enemySquare)
-        {
-          enemySquare = (Mathf.Abs(c.GetComponent<Transform>().position.x-selected.GetComponent<Transform>().position.x)+Mathf.Abs(c.GetComponent<Transform>().position.y-selected.GetComponent<Transform>().position.y));
-          enemyPosition = c.GetComponent<Transform>().position;
-        }
-      }
-      //Check if any squares next to the thing are occupied, starting with the closest one
-      List<Point> p = stepTowardsPath(enemyPosition.x, enemyPosition.y);
-      StartCoroutine(stepThroughPath(p));
+			Vector3 enemyPosition = new Vector3(0,0,0);
+			foreach(GameObject c in characters)
+			{
+				if((Mathf.Abs(c.GetComponent<Transform>().position.x-selected.GetComponent<Transform>().position.x)+Mathf.Abs(c.GetComponent<Transform>().position.y-selected.GetComponent<Transform>().position.y)) < enemySquare)
+				{
+				  enemySquare = (Mathf.Abs(c.GetComponent<Transform>().position.x-selected.GetComponent<Transform>().position.x)+Mathf.Abs(c.GetComponent<Transform>().position.y-selected.GetComponent<Transform>().position.y));
+				  enemyPosition = c.GetComponent<Transform>().position;
+				}
+			  }
+			
+			if(checkOccupancy(new Vector3(enemyPosition.x+1, enemyPosition.y, enemyPosition.z)))
+			{
+				enemyPosition = new Vector3(enemyPosition.x+1, enemyPosition.y, enemyPosition.z);
+			}
+			else if(checkOccupancy(new Vector3(enemyPosition.x-1, enemyPosition.y, enemyPosition.z)))
+			{
+				enemyPosition = new Vector3(enemyPosition.x-1, enemyPosition.y, enemyPosition.z);
+			}
+			else if(checkOccupancy(new Vector3(enemyPosition.x, enemyPosition.y+1, enemyPosition.z)))
+			{
+				enemyPosition = new Vector3(enemyPosition.x, enemyPosition.y+1, enemyPosition.z);
+			}
+			else if(checkOccupancy(new Vector3(enemyPosition.x, enemyPosition.y-1, enemyPosition.z)))
+			{
+				enemyPosition = new Vector3(enemyPosition.x, enemyPosition.y-1, enemyPosition.z);
+			}
+			List<Point> p = stepTowardsPath(enemyPosition.x, enemyPosition.y);
+			StartCoroutine(stepThroughPath(p));
 			selected.GetComponent<Character>().reduceInitiative();
-
 		}
     }
 	}
@@ -242,6 +265,7 @@ public class CharacterTurnMove : MonoBehaviour
 		return combatMembers;
 	}
 
+	
 	public void attackButton()
 	{
     if(!moving)
@@ -366,7 +390,7 @@ public class CharacterTurnMove : MonoBehaviour
 		{
 			selectSkill = true;
 		}
-  }
+	}
 	}
 
 	public void returnButton()
@@ -579,11 +603,64 @@ public class CharacterTurnMove : MonoBehaviour
 		foreach(Point p in path)
 		{
 			selected.GetComponent<Transform>().position = new Vector3(p.X, p.Y, 0f);
-      selected.GetComponent<Character>().reduceActionPoints(1);
-      yield return new WaitForSeconds(.25f);
+		  selected.GetComponent<Character>().reduceActionPoints(1);
+		  if(cameraLock)
+			{
+			  Camera.main.transform.position = new Vector3(Mathf.Clamp(selected.GetComponent<Transform>().position.x, minX, maxX), Mathf.Clamp(selected.GetComponent<Transform>().position.y, minY, maxY), -10);
+			  Camera.main.transform.position = new Vector3(Camera.main.transform.position.x, Camera.main.transform.position.y, -10);
+			}
+			yield return new WaitForSeconds(.25f);
 		}
+    if(selected.tag == "Enemy")
+    {
+		if(selected.GetComponent<Character>().currentActionPoints >= 2 && !checkCharacterOccupancy(new Vector3(selected.transform.position.x+1, selected.transform.position.y, selected.transform.position.z)).Item1)
+		{
+			checkCharacterOccupancy(new Vector3(selected.transform.position.x+1, selected.transform.position.y, selected.transform.position.z)).Item2.GetComponent<Character>().currentHealth--;
+			chatText.GetComponent<textToChat>().processLine(selected.name + " dealt 1 damage to " + checkCharacterOccupancy(new Vector3(selected.transform.position.x+1, selected.transform.position.y, selected.transform.position.z)).Item2.name);
+		}
+		else if(selected.GetComponent<Character>().currentActionPoints >= 2 && !checkCharacterOccupancy(new Vector3(selected.transform.position.x-1, selected.transform.position.y, selected.transform.position.z)).Item1)
+		{
+			checkCharacterOccupancy(new Vector3(selected.transform.position.x-1, selected.transform.position.y, selected.transform.position.z)).Item2.GetComponent<Character>().currentHealth--;
+			chatText.GetComponent<textToChat>().processLine(selected.name + " dealt 1 damage to " + checkCharacterOccupancy(new Vector3(selected.transform.position.x-1, selected.transform.position.y, selected.transform.position.z)).Item2.name);
+		}
+		else if(selected.GetComponent<Character>().currentActionPoints >= 2 && !checkCharacterOccupancy(new Vector3(selected.transform.position.x, selected.transform.position.y+1, selected.transform.position.z)).Item1)
+		{
+			checkCharacterOccupancy(new Vector3(selected.transform.position.x, selected.transform.position.y+1, selected.transform.position.z)).Item2.GetComponent<Character>().currentHealth--;
+			chatText.GetComponent<textToChat>().processLine(selected.name + " dealt 1 damage to " + checkCharacterOccupancy(new Vector3(selected.transform.position.x, selected.transform.position.y+1, selected.transform.position.z)).Item2.name);
+		}
+		else if(selected.GetComponent<Character>().currentActionPoints >= 2 && !checkCharacterOccupancy(new Vector3(selected.transform.position.x, selected.transform.position.y-1, selected.transform.position.z)).Item1)
+		{
+			checkCharacterOccupancy(new Vector3(selected.transform.position.x, selected.transform.position.y-1, selected.transform.position.z)).Item2.GetComponent<Character>().currentHealth--;
+			chatText.GetComponent<textToChat>().processLine(selected.name + " dealt 1 damage to " + checkCharacterOccupancy(new Vector3(selected.transform.position.x, selected.transform.position.y-1, selected.transform.position.z)).Item2.name);
+		}
+		
+		selected.GetComponent<Character>().currentActionPoints = selected.GetComponent<Character>().maxActionPoints;
+    }
     moving = false;
 	}
 
+	bool checkOccupancy(Vector3 checkPosition)
+	{
+		foreach(GameObject s in combatMembers)
+		{
+			if(s.transform.position == checkPosition && s != selected)
+			{
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	Tuple<bool,GameObject> checkCharacterOccupancy(Vector3 checkPosition)
+	{
+		foreach(GameObject s in characters)
+		{
+			if(s.transform.position == checkPosition)
+			{
+				return Tuple.Create(false, s);
+			}
+		}
+		return Tuple.Create(true, selected);
+	}
 
 }
