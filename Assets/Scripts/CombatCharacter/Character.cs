@@ -49,6 +49,12 @@ public class Character : MonoBehaviour
 			stats.currentHealth = stats.health;
 			stats.damage = 4;
 		}
+		else if(gameObject.name == "Slime")
+		{
+			stats.health = 12;
+			stats.currentHealth = stats.health;
+			stats.damage = 3;
+		}
 		else
 		{
 			stats.health = 10 + 5*level;
@@ -56,6 +62,14 @@ public class Character : MonoBehaviour
 			stats.strength = 5 + 5*level;
 		}
     }
+
+	void Update()
+	{
+		if(stats.currentHealth <= 0)
+		{
+			Destroy(gameObject);
+		}
+	}
 
     public void activateSkill(int number)
     {

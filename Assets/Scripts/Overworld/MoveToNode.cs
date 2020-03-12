@@ -11,7 +11,14 @@ public class MoveToNode : MonoBehaviour
     TileBase tile;
     List<(float, float)> tupleList = new List<(float, float)>{};
 	public GameObject overWorldCamera;
-	public GameObject overWorldCanvas;
+	public GameObject overWorld;
+	public GameObject combat1Camera;
+	public GameObject combat1;
+	public GameObject endCombatScreen1;
+	public GameObject combat2Camera;
+	public GameObject combat2;
+	public GameObject endCombatScreen2;
+	int i = 1;
     // Start is called before the first frame update
     void Start()
     {
@@ -75,14 +82,26 @@ public class MoveToNode : MonoBehaviour
       else if(r < 4.0f && r > 2.0f)
       {
         Debug.Log("Town");
-        //SceneManager.LoadScene("Town_menu");
       }
       else
       {
-        Debug.Log("Battle");
-        SceneManager.LoadScene("combat1", LoadSceneMode.Additive);
-		overWorldCamera.SetActive(false);
-		overWorldCanvas.SetActive(false);
+		  if(i == 1)
+		  {
+			i++;
+			overWorldCamera.tag = ("Untagged");
+			overWorld.SetActive(false);
+			combat1Camera.tag = ("MainCamera");
+			combat1.SetActive(true);
+			endCombatScreen1.SetActive(false);
+		  }
+		  else
+		  {
+			overWorldCamera.tag = ("Untagged");
+			overWorld.SetActive(false);
+			combat2Camera.tag = ("MainCamera");
+			combat2.SetActive(true);
+			endCombatScreen2.SetActive(false);
+		  }
       }
     }
 }
