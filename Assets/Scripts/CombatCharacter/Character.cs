@@ -5,9 +5,11 @@ using UnityEngine;
 public class Character : MonoBehaviour
 {
     public string Cname;
-    public int initiative;
-    public int maxActionPoints;
-    public int currentActionPoints;
+	public int level = 1;
+	public int experience = 0;
+    public int initiative = 50;
+    public int maxActionPoints = 5;
+    public int currentActionPoints = 5;
     public Sprite CharSprite;
     // Stats for combat
     public int health;
@@ -47,6 +49,9 @@ public class Character : MonoBehaviour
         {
             SkillsActive[i] = false;
         }
+		health = 10 + 5*level;
+		currentHealth = health;
+		strength = 5 + 5*level;
     }
 
     public void activateSkill(int number)
