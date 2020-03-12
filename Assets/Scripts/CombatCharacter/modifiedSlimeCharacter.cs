@@ -29,7 +29,7 @@ public class modifiedSlimeCharacter : MonoBehaviour
 		health = 10 + (int)UnityEngine.Random.Range(0.0f, 5.0f) * 5;
 		currentHealth = health;
 		strength = 5 + (int)UnityEngine.Random.Range(0.0f, 5.0f) * 5;
-		evasion = (int)UnityEngine.Random.Range(0.3f, 0.5f);
+		evasion = UnityEngine.Random.Range(0.3f, 0.5f);
     }
 
  
