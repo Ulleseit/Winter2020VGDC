@@ -79,7 +79,7 @@ public class Character : MonoBehaviour
 
     public string printStat()
     {
-        return " Stats \n" + "initiative: " + initiative + "\nActionPoints: " + maxActionPoints + "\nhealth: " + health + "\narmor:" + armor + "\nstrength: " + strength + "\nmana: " + mana + "\naccuracy: " + accuracy + "\nevasion: " + evasion;
+        return " Stats \n" + "initiative: " + initiative + "\nActionPoints: " + maxActionPoints + "\nhealth: " + stats.health + "\narmor:" + stats.armor + "\nstrength: " + stats.strength + "\nmana: " + stats.mana + "\naccuracy: " + stats.accuracy + "\nevasion: " + stats.evasion;
     }
 
     public void equipItem(string slot, Item item)
