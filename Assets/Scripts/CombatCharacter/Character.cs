@@ -154,8 +154,8 @@ public class Character : MonoBehaviour
                 Debug.Log("Invalid slot");
                 return;
         }
-
-        stats += item.stats;
+	Debug.Log(item.name);
+        //stats = stats + item.stats;
     }
 
     public void unequipItem(string slot)

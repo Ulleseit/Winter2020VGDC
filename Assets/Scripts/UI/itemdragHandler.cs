@@ -44,7 +44,7 @@ public class itemdragHandler : MonoBehaviour , IBeginDragHandler, IDragHandler, 
 		// We should check if we can place ourselves​ there.
 		if (!slot.filled)
 		{
-		    slot.filled = false;
+		    current.filled = false;
 		    Debug.Log("OK");
 		    // Swapping references.
 		    slot.item = current.item;
@@ -52,6 +52,7 @@ public class itemdragHandler : MonoBehaviour , IBeginDragHandler, IDragHandler, 
 		    current = slot;
 		    transform.parent = hit.gameObject.transform;
 		    transform.position = transform.parent.position;
+		    slot.filled = true;
 		}
 	    }	
 	    	
