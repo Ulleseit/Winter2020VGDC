@@ -21,7 +21,7 @@ public class InventoryHandler : MonoBehaviour
     	{
     		Item item = Instantiate(myPrefab, new Vector3(0, 0, 0), Quaternion.identity).GetComponent<Item>();
 		item.GetComponent<Item>().name = ItemList.Count.ToString("0000");
-		ItemList.Add(item);
+		this.AddItem(item);
     		Debug.Log(ItemList.Count);
 	}
         public void AddItem(Item item) 
@@ -32,7 +32,14 @@ public class InventoryHandler : MonoBehaviour
 			ItemList.Add(item);
 			for(int i = 0; i < Invenlist.Count; i++){
 				if(Invenlist[i].GetComponent<UISlot>().filled == false)
+				{
 					Invenlist[i].GetComponent<UISlot>().item = item;	
+					item.GetComponent<itemdragHandler>().current = Invenlist[i].GetComponent<UISlot>();
+					Invenlist[i].GetComponent<UISlot>().filled = true;
+					Invenlist[i].GetComponent<UISlot>().item.transform.parent = Invenlist[i].GetComponent<UISlot>().gameObject.transform;
+		    			Invenlist[i].GetComponent<UISlot>().item.transform.position = Invenlist[i].GetComponent<UISlot>().gameObject.transform.position;
+					break;
+				}
 			}
 				
 		}

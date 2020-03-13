@@ -44,6 +44,7 @@ public class itemdragHandler : MonoBehaviour , IBeginDragHandler, IDragHandler, 
 		// We should check if we can place ourselves​ there.
 		if (!slot.filled)
 		{
+		    slot.filled = false;
 		    Debug.Log("OK");
 		    // Swapping references.
 		    slot.item = current.item;
