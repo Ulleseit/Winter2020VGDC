@@ -31,6 +31,7 @@ public class CharacterTurnMove : MonoBehaviour
   	public TileBase mountain;
     bool moving = false;
 	public GameObject chatText;
+	public bool running = true;
     void Start()
     {
 		characters = GameObject.FindGameObjectsWithTag("Character");//Set up and update array of GameObjects that are player controlled
@@ -40,7 +41,7 @@ public class CharacterTurnMove : MonoBehaviour
     }
     void Update()
     {
-    if(!moving)
+    if(!moving && running)
     {
 		Camera.main.transform.position = new Vector3(Mathf.Clamp(Camera.main.transform.position.x, minX, maxX), Mathf.Clamp(Camera.main.transform.position.y, minY, maxY), -10);
 		combatMembers = createCombatMembers();
@@ -89,7 +90,7 @@ public class CharacterTurnMove : MonoBehaviour
 			if(Input.GetMouseButtonDown(0))//Check if Player is clicking with a selected character
 			{
 				//Movement Code
-				
+				Debug.Log(position);
 				if((int)(Math.Abs(selected.GetComponent<Transform>().position.x - position.x) + Math.Abs(selected.GetComponent<Transform>().position.y - position.y)) > selected.GetComponent<Character>().currentActionPoints)
 				{
 					Debug.Log("Too far to move!");
@@ -254,7 +255,7 @@ public class CharacterTurnMove : MonoBehaviour
 			int greatestPosition = n;
 			for(int m = n+1; m < combatMembers.Length; m++)
 			{
-				if(combatMembers[m].GetComponent<Character>().initiative > combatMembers[greatestPosition].GetComponent<Character>().initiative)
+				if(combatMembers[m].GetComponent<Character>().curInitiative > combatMembers[greatestPosition].GetComponent<Character>().curInitiative)
 				{
 					greatestPosition = m;
 				}
@@ -592,6 +593,7 @@ public class CharacterTurnMove : MonoBehaviour
 			}
 			else if(moves == 0 || (movingX == x && movingY == y))
 			{
+				
 				return path;
 			}
 

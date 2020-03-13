@@ -6,15 +6,17 @@ using UnityEngine.SceneManagement;
 
 public class endCombat : MonoBehaviour
 {
-	public GameObject endCombatScreen;
+	public GameObject endCombatScreen1;
 	public GameObject prefab;
 	public GameObject overWorldCamera;
 	public GameObject overWorld;
 	public GameObject combat1Camera;
 	public GameObject combat1;
+	public GameObject tilemap1;
 	public GameObject combat2Camera;
 	public GameObject combat2;
-	
+	public GameObject tilemap2;
+	public GameObject endCombatScreen2;
     // Start is called before the first frame update
     void Start()
     {
@@ -26,11 +28,18 @@ public class endCombat : MonoBehaviour
     {
         GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
 		GameObject[] characters = GameObject.FindGameObjectsWithTag("Character");
-		Debug.Log(characters.Length);
 		if(enemies.Length == 0)
 		{
-			endCombatScreen.SetActive(true);
-			
+			if(combat1.active)
+			{
+				tilemap1.GetComponent<CharacterTurnMove>().running = false;
+				endCombatScreen1.SetActive(true);
+			}
+			else
+			{
+				tilemap2.GetComponent<CharacterTurnMove>().running = false;
+				endCombatScreen2.SetActive(true);
+			}
 		}
 		else if(characters.Length == 0)
 		{
@@ -40,6 +49,11 @@ public class endCombat : MonoBehaviour
 
 	void endCombatButton()
 	{
+		foreach(Character i in overWorldCamera.GetComponent<CharacterHandler>().CharactersList)
+		{
+			i.curInitiative = i.initiative;
+			i.stats.currentHealth = i.stats.health;
+		}
 		if(combat1.active)
 		{
 			overWorldCamera.tag = ("MainCamera");

@@ -105,14 +105,15 @@ MonoBehaviour:
   level: 1
   experience: 0
   initiative: 50
+  curInitiative: 0
   maxActionPoints: 5
   currentActionPoints: 5
-  CharSprite: {fileID: 0}
+  CharSprite: {fileID: 21300000, guid: fcb7353b4feccfe4a8cdf8d4c0e4765f, type: 3}
   NumSkill: 6
   SkillsActive: 000000000000
-  RHand: {fileID: 0}
-  LHand: {fileID: 0}
-  Armor: {fileID: 0}
+  RHandSlot: {fileID: 0}
+  LHandSlot: {fileID: 0}
+  ArmorSlot: {fileID: 0}
 --- !u!222 &5486648786308702984
 CanvasRenderer:
   m_ObjectHideFlags: 0
