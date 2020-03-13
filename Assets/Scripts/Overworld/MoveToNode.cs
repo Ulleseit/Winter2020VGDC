@@ -62,7 +62,6 @@ public class MoveToNode : MonoBehaviour
 		float pathy = (Camera.main.transform.position.y + pos.y)/2;
 		float pathz = pos.z;
 		Vector3 checkRoad = new Vector3(pathx, pathy, pathz);
-		Debug.Log(checkRoad);
 		Vector3Int tileLocation = tilemap.WorldToCell(checkRoad);
         TileBase roadTile = tilemap.GetTile(tileLocation);
 		if(roadTile.name == "NodeConnectorUD" || roadTile.name == "NodeConnectorLR")

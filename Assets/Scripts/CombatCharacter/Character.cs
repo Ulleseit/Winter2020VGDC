@@ -8,6 +8,7 @@ public class Character : MonoBehaviour
 	public int level = 1;
 	public int experience = 0;
     public int initiative = 50;
+	public int curInitiative;
     public int maxActionPoints = 5;
     public int currentActionPoints = 5;
     public Sprite CharSprite;
@@ -83,18 +84,23 @@ public class Character : MonoBehaviour
 			Health = 8;
 			CurrentHealth = Health;
 			Damage = 4;
+			initiative = 25;
+			curInitiative = 25;
 		}
 		else if(gameObject.name == "Slime")
 		{
 			Health = 12;
 			CurrentHealth = Health;
 			Damage = 3;
+			initiative = 25;
+			curInitiative = 25;
 		}
 		else
 		{
 			Health = 10 + 5*level;
 			CurrentHealth = Health;
 			Strength = 5 + 5*level;
+			curInitiative = initiative;
 		}
     }
 
@@ -118,7 +124,7 @@ public class Character : MonoBehaviour
 
     public void reduceInitiative()//Used to reduce initiative at the end of the turn, should initiatives ever end up higher than 100, change value to minus 1000 unless high initiative means taking an extra turn
     {
-        initiative -= 100;
+        curInitiative -= 100;
     }
 
     public void reduceActionPoints(int n)//Used to reduce action points, given an int to reduce by
@@ -128,7 +134,7 @@ public class Character : MonoBehaviour
 
     public string printStat()
     {
-        return " Stats \n" + "initiative: " + initiative + "\nActionPoints: " + maxActionPoints + "\nhealth: " + Health + "\narmor:" + Armor + "\nstrength: " + Strength + "\nmana: " + Mana + "\naccuracy: " + Accuracy + "\nevasion: " + Evasion;
+        return " Name:\n" +gameObject.name +  "\nInitiative: " + initiative + "\nActionPoints: " + maxActionPoints + "\nHealth: " + Health + "\nArmor:" + Armor + "\nStrength: " + Strength + "\nMana: " + Mana + "\nAccuracy: " + Accuracy + "\nEvasion: " + Evasion;
     }
 
     public void equipItem(string slot, Item item)
