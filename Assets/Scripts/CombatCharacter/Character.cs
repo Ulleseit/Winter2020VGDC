@@ -14,6 +14,41 @@ public class Character : MonoBehaviour
 
     public CharacterStats stats = new CharacterStats();
 
+    public int Health { 
+        get { return stats.health; } 
+        set { stats.health = value; }
+    }
+    public int CurrentHealth {
+        get { return stats.currentHealth; }
+        set { stats.currentHealth = value; }
+    }
+    public int Armor {
+        get { return stats.armor; }
+        set { stats.armor = value; }
+    }
+    public int Strength {
+        get { return stats.strength; }
+        set { stats.strength = value; }
+    }
+    public int Mana {
+        get { return stats.strength; }
+        set { stats.mana = value; }
+    }
+    public int Accuracy {
+        get { return stats.accuracy; }
+        set { stats.accuracy = value; }
+    }
+    public int Evasion {
+        get { return stats.evasion; }
+        set { stats.evasion = value; }
+    }
+    public int Damage {
+        get { return stats.damage; }
+        set { stats.damage = value; }
+    }
+
+
+
     public int NumSkill = 6;
     public bool[] SkillsActive = new bool[6];
     public Skill[] SkillTree = new Skill[6];
@@ -33,9 +68,9 @@ public class Character : MonoBehaviour
         }
     }
 
-    public Item RHand = new Item { itemType = Item.ItemType.Weapon, stats = new CharacterStats() };
-    public Item LHand = new Item { itemType = Item.ItemType.Weapon, stats = new CharacterStats() };
-    public Item Armor = new Item { itemType = Item.ItemType.Weapon, stats = new CharacterStats() };
+    public Item RHandSlot = new Item { itemType = Item.ItemType.Weapon, stats = new CharacterStats() };
+    public Item LHandSlot = new Item { itemType = Item.ItemType.Weapon, stats = new CharacterStats() };
+    public Item ArmorSlot = new Item { itemType = Item.ItemType.Weapon, stats = new CharacterStats() };
 
     void Start()
     {
@@ -45,27 +80,27 @@ public class Character : MonoBehaviour
         }
 		if(gameObject.name == "Spider")
 		{
-			stats.health = 8;
-			stats.currentHealth = stats.health;
-			stats.damage = 4;
+			Health = 8;
+			CurrentHealth = Health;
+			Damage = 4;
 		}
 		else if(gameObject.name == "Slime")
 		{
-			stats.health = 12;
-			stats.currentHealth = stats.health;
-			stats.damage = 3;
+			Health = 12;
+			CurrentHealth = Health;
+			Damage = 3;
 		}
 		else
 		{
-			stats.health = 10 + 5*level;
-			stats.currentHealth = stats.health;
-			stats.strength = 5 + 5*level;
+			Health = 10 + 5*level;
+			CurrentHealth = Health;
+			Strength = 5 + 5*level;
 		}
     }
 
 	void Update()
 	{
-		if(stats.currentHealth <= 0)
+		if(CurrentHealth <= 0)
 		{
 			Destroy(gameObject);
 		}
@@ -93,7 +128,7 @@ public class Character : MonoBehaviour
 
     public string printStat()
     {
-        return " Stats \n" + "initiative: " + initiative + "\nActionPoints: " + maxActionPoints + "\nhealth: " + stats.health + "\narmor:" + stats.armor + "\nstrength: " + stats.strength + "\nmana: " + stats.mana + "\naccuracy: " + stats.accuracy + "\nevasion: " + stats.evasion;
+        return " Stats \n" + "initiative: " + initiative + "\nActionPoints: " + maxActionPoints + "\nhealth: " + Health + "\narmor:" + Armor + "\nstrength: " + Strength + "\nmana: " + Mana + "\naccuracy: " + Accuracy + "\nevasion: " + Evasion;
     }
 
     public void equipItem(string slot, Item item)
@@ -101,13 +136,13 @@ public class Character : MonoBehaviour
         switch (slot)
         {
             case "rhand":
-                RHand = item;
+                RHandSlot = item;
                 break;
             case "lhand":
-                LHand = item;
+                LHandSlot = item;
                 break;
             case "armor":
-                Armor = item;
+                ArmorSlot = item;
                 break;
             default:
                 Debug.Log("Invalid slot");
@@ -122,16 +157,16 @@ public class Character : MonoBehaviour
         switch (slot)
         {
             case "rhand":
-                stats -= RHand.stats;
-                RHand = new Item { itemType = Item.ItemType.Weapon, stats = new CharacterStats() };
+                stats -= RHandSlot.stats;
+                RHandSlot = new Item { itemType = Item.ItemType.Weapon, stats = new CharacterStats() };
                 break;
             case "lhand":
-                stats -= LHand.stats;
-                LHand = new Item { itemType = Item.ItemType.Weapon, stats = new CharacterStats() };
+                stats -= LHandSlot.stats;
+                LHandSlot = new Item { itemType = Item.ItemType.Weapon, stats = new CharacterStats() };
                 break;
             case "armor":
-                stats -= Armor.stats;
-                Armor = new Item { itemType = Item.ItemType.Weapon, stats = new CharacterStats() };
+                stats -= ArmorSlot.stats;
+                ArmorSlot = new Item { itemType = Item.ItemType.Weapon, stats = new CharacterStats() };
                 break;
             default:
                 Debug.Log("Invalid slot");

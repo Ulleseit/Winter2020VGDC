@@ -163,8 +163,8 @@ public class CharacterTurnMove : MonoBehaviour
 				Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 				if(Physics.Raycast(ray, out hit) && hit.transform.tag == "Enemy")
 				{
-					hit.transform.gameObject.GetComponent<Character>().stats.currentHealth = hit.transform.gameObject.GetComponent<Character>().stats.currentHealth - selected.GetComponent<Character>().stats.strength/2;
-					chatText.GetComponent<textToChat>().processLine(selected.name + " dealt " + selected.GetComponent<Character>().stats.strength/2 + " damage to " + hit.transform.gameObject.name);
+					hit.transform.gameObject.GetComponent<Character>().CurrentHealth = hit.transform.gameObject.GetComponent<Character>().CurrentHealth - selected.GetComponent<Character>().Strength/2;
+					chatText.GetComponent<textToChat>().processLine(selected.name + " dealt " + selected.GetComponent<Character>().Strength/2 + " damage to " + hit.transform.gameObject.name);
 					selectAttack = false;
 					endButton();
 				}
@@ -175,7 +175,7 @@ public class CharacterTurnMove : MonoBehaviour
 				Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 				if(Physics.Raycast(ray, out hit) && hit.transform.tag == "Enemy")
 				{
-					hit.transform.gameObject.GetComponent<Character>().stats.currentHealth = hit.transform.gameObject.GetComponent<Character>().stats.currentHealth - 1;
+					hit.transform.gameObject.GetComponent<Character>().CurrentHealth = hit.transform.gameObject.GetComponent<Character>().CurrentHealth - 1;
 					chatText.GetComponent<textToChat>().processLine(selected.name + " dealt 1 damage to " + hit.transform.gameObject.name);
 					selectAttack = false;
 					endButton();
@@ -616,23 +616,23 @@ public class CharacterTurnMove : MonoBehaviour
     {
 		if(selected.GetComponent<Character>().currentActionPoints >= 2 && !checkCharacterOccupancy(new Vector3(selected.transform.position.x+1, selected.transform.position.y, selected.transform.position.z)).Item1)
 		{
-			checkCharacterOccupancy(new Vector3(selected.transform.position.x+1, selected.transform.position.y, selected.transform.position.z)).Item2.GetComponent<Character>().stats.currentHealth = checkCharacterOccupancy(new Vector3(selected.transform.position.x+1, selected.transform.position.y, selected.transform.position.z)).Item2.GetComponent<Character>().stats.currentHealth - selected.GetComponent<Character>().stats.damage;
-			chatText.GetComponent<textToChat>().processLine(selected.name + " dealt " + selected.GetComponent<Character>().stats.damage + " damage to " + checkCharacterOccupancy(new Vector3(selected.transform.position.x+1, selected.transform.position.y, selected.transform.position.z)).Item2.name);
+			checkCharacterOccupancy(new Vector3(selected.transform.position.x+1, selected.transform.position.y, selected.transform.position.z)).Item2.GetComponent<Character>().CurrentHealth = checkCharacterOccupancy(new Vector3(selected.transform.position.x+1, selected.transform.position.y, selected.transform.position.z)).Item2.GetComponent<Character>().CurrentHealth - selected.GetComponent<Character>().Damage;
+			chatText.GetComponent<textToChat>().processLine(selected.name + " dealt " + selected.GetComponent<Character>().Damage + " damage to " + checkCharacterOccupancy(new Vector3(selected.transform.position.x+1, selected.transform.position.y, selected.transform.position.z)).Item2.name);
 		}
 		else if(selected.GetComponent<Character>().currentActionPoints >= 2 && !checkCharacterOccupancy(new Vector3(selected.transform.position.x-1, selected.transform.position.y, selected.transform.position.z)).Item1)
 		{
-			checkCharacterOccupancy(new Vector3(selected.transform.position.x-1, selected.transform.position.y, selected.transform.position.z)).Item2.GetComponent<Character>().stats.currentHealth = checkCharacterOccupancy(new Vector3(selected.transform.position.x-1, selected.transform.position.y, selected.transform.position.z)).Item2.GetComponent<Character>().stats.currentHealth - selected.GetComponent<Character>().stats.damage;
-			chatText.GetComponent<textToChat>().processLine(selected.name + " dealt " + selected.GetComponent<Character>().stats.damage + " damage to " + checkCharacterOccupancy(new Vector3(selected.transform.position.x-1, selected.transform.position.y, selected.transform.position.z)).Item2.name);
+			checkCharacterOccupancy(new Vector3(selected.transform.position.x-1, selected.transform.position.y, selected.transform.position.z)).Item2.GetComponent<Character>().CurrentHealth = checkCharacterOccupancy(new Vector3(selected.transform.position.x-1, selected.transform.position.y, selected.transform.position.z)).Item2.GetComponent<Character>().CurrentHealth - selected.GetComponent<Character>().Damage;
+			chatText.GetComponent<textToChat>().processLine(selected.name + " dealt " + selected.GetComponent<Character>().Damage + " damage to " + checkCharacterOccupancy(new Vector3(selected.transform.position.x-1, selected.transform.position.y, selected.transform.position.z)).Item2.name);
 		}
 		else if(selected.GetComponent<Character>().currentActionPoints >= 2 && !checkCharacterOccupancy(new Vector3(selected.transform.position.x, selected.transform.position.y+1, selected.transform.position.z)).Item1)
 		{
-			checkCharacterOccupancy(new Vector3(selected.transform.position.x, selected.transform.position.y+1, selected.transform.position.z)).Item2.GetComponent<Character>().stats.currentHealth = checkCharacterOccupancy(new Vector3(selected.transform.position.x, selected.transform.position.y+1, selected.transform.position.z)).Item2.GetComponent<Character>().stats.currentHealth - selected.GetComponent<Character>().stats.damage;
-			chatText.GetComponent<textToChat>().processLine(selected.name + " dealt " + selected.GetComponent<Character>().stats.damage + " damage to " + checkCharacterOccupancy(new Vector3(selected.transform.position.x, selected.transform.position.y+1, selected.transform.position.z)).Item2.name);
+			checkCharacterOccupancy(new Vector3(selected.transform.position.x, selected.transform.position.y+1, selected.transform.position.z)).Item2.GetComponent<Character>().CurrentHealth = checkCharacterOccupancy(new Vector3(selected.transform.position.x, selected.transform.position.y+1, selected.transform.position.z)).Item2.GetComponent<Character>().CurrentHealth - selected.GetComponent<Character>().Damage;
+			chatText.GetComponent<textToChat>().processLine(selected.name + " dealt " + selected.GetComponent<Character>().Damage + " damage to " + checkCharacterOccupancy(new Vector3(selected.transform.position.x, selected.transform.position.y+1, selected.transform.position.z)).Item2.name);
 		}
 		else if(selected.GetComponent<Character>().currentActionPoints >= 2 && !checkCharacterOccupancy(new Vector3(selected.transform.position.x, selected.transform.position.y-1, selected.transform.position.z)).Item1)
 		{
-			checkCharacterOccupancy(new Vector3(selected.transform.position.x, selected.transform.position.y-1, selected.transform.position.z)).Item2.GetComponent<Character>().stats.currentHealth = checkCharacterOccupancy(new Vector3(selected.transform.position.x, selected.transform.position.y-1, selected.transform.position.z)).Item2.GetComponent<Character>().stats.currentHealth - selected.GetComponent<Character>().stats.damage;
-			chatText.GetComponent<textToChat>().processLine(selected.name + " dealt " + selected.GetComponent<Character>().stats.damage + " damage to " + checkCharacterOccupancy(new Vector3(selected.transform.position.x, selected.transform.position.y-1, selected.transform.position.z)).Item2.name);
+			checkCharacterOccupancy(new Vector3(selected.transform.position.x, selected.transform.position.y-1, selected.transform.position.z)).Item2.GetComponent<Character>().CurrentHealth = checkCharacterOccupancy(new Vector3(selected.transform.position.x, selected.transform.position.y-1, selected.transform.position.z)).Item2.GetComponent<Character>().CurrentHealth - selected.GetComponent<Character>().Damage;
+			chatText.GetComponent<textToChat>().processLine(selected.name + " dealt " + selected.GetComponent<Character>().Damage + " damage to " + checkCharacterOccupancy(new Vector3(selected.transform.position.x, selected.transform.position.y-1, selected.transform.position.z)).Item2.name);
 		}
 		
 		selected.GetComponent<Character>().currentActionPoints = selected.GetComponent<Character>().maxActionPoints;

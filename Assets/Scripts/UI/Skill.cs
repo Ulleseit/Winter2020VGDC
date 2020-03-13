@@ -11,6 +11,4 @@ public class Skill
 	public string description;
 	public CharacterStats statModifier;
 	public Sprite sprite;
-	
-
 }
