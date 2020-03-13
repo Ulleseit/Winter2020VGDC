@@ -134,7 +134,7 @@ public class Character : MonoBehaviour
 
     public string printStat()
     {
-        return " Name:\n" +gameObject.name +  "\nInitiative: " + initiative + "\nActionPoints: " + maxActionPoints + "\nHealth: " + Health + "\nArmor:" + Armor + "\nStrength: " + Strength + "\nMana: " + Mana + "\nAccuracy: " + Accuracy + "\nEvasion: " + Evasion;
+        return gameObject.name + "\nLevel: " + level + "\nExperience: " + experience + "/" + level*125 + "\nHealth: " + Health + "\nStrength: " + Strength + "\nInitiative: " + initiative + "\nActionPoints: " + maxActionPoints;
     }
 
     public void equipItem(string slot, Item item)
