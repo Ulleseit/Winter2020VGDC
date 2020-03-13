@@ -18,5 +18,5 @@ public class Item : MonoBehaviour
     public string name = "Nothing";
     public string description = "There's nothing here";
     public CharacterStats stats;
-    // public Sprite sprite;
+    public Sprite sprite;
 }

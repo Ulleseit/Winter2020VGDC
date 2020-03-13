@@ -22,14 +22,15 @@ public class itemdragHandler : MonoBehaviour , IBeginDragHandler, IDragHandler, 
     public void OnEndDrag(PointerEventData eventData)
     {
     	var results = new List<RaycastResult>();
-        EventSystem.current.RaycastAll(pointerEventData, results);
     	transform.localPosition = Vector3.zero;
+    	pointerEventData.position = Input.mousePosition;
+        EventSystem.current.RaycastAll(pointerEventData, results);
 
-	pointerEventData.position = Input.mousePosition;
+	
     	
     	for (int i = 0; i < results.Count; i++)
 	{
-	    //Debug.Log(results[i].gameObject.name + " " + i);
+	   Debug.Log(results[i].gameObject.name + " " + i);
 	}
 	
     	foreach (var hit in results)
@@ -42,10 +43,12 @@ public class itemdragHandler : MonoBehaviour , IBeginDragHandler, IDragHandler, 
 		// We should check if we can place ourselves​ there.
 		if (!slot.filled)
 		{
-		    //Debug.Log("OK");
+		    Debug.Log("OK");
 		    // Swapping references.
 		    slot.item = current.item;
 		    current.item = null;
+		    transform.parent = hit.gameObject.transform;
+		    transform.position = transform.parent.position;
 		}
 	    }	
 	    	
