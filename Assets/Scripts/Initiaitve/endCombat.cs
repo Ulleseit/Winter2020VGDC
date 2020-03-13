@@ -53,6 +53,14 @@ public class endCombat : MonoBehaviour
 		{
 			i.curInitiative = i.initiative;
 			i.stats.currentHealth = i.stats.health;
+			if(prefab.name == "Spider")
+			{
+				i.experience += 45;
+			}
+			else if(prefab.name == "Slime")
+			{
+				i.experience += 60;
+			}
 		}
 		if(combat1.active)
 		{

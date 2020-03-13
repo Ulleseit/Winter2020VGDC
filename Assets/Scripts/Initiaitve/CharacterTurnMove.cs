@@ -90,7 +90,6 @@ public class CharacterTurnMove : MonoBehaviour
 			if(Input.GetMouseButtonDown(0))//Check if Player is clicking with a selected character
 			{
 				//Movement Code
-				Debug.Log(position);
 				if((int)(Math.Abs(selected.GetComponent<Transform>().position.x - position.x) + Math.Abs(selected.GetComponent<Transform>().position.y - position.y)) > selected.GetComponent<Character>().currentActionPoints)
 				{
 					Debug.Log("Too far to move!");
@@ -468,37 +467,37 @@ public class CharacterTurnMove : MonoBehaviour
 		{
 
 		  if(x > movingX && moves > 0)
-			{
-        if(tilemap.GetTile(tilemap.WorldToCell(new Vector3(movingX+1, movingY, 0))).name == "mountains")
-        {
-          if(y > movingY)
-          {
-            Point tempPoint = new Point(movingX, movingY+1);
-    				path.Add(tempPoint);
-    				movingY++;
-    				moves--;
-          }
-          else if(y < movingY)
-          {
-            Point tempPoint = new Point(movingX, movingY-1);
-    				path.Add(tempPoint);
-    				movingY++;
-    				moves--;
-          }
-          else
-          {
-            return path;
-          }
-        }
-        else
-        {
-  				Point tempPoint = new Point(movingX+1, movingY);
-  				path.Add(tempPoint);
-  				movingX++;
-  				moves--;
-        }
-			}
-			else if(x < movingX && moves > 0)
+				{
+				if(tilemap.GetTile(tilemap.WorldToCell(new Vector3(movingX+1, movingY, 0))).name == "mountains")
+				{
+				  if(y > movingY)
+				  {
+					Point tempPoint = new Point(movingX, movingY+1);
+							path.Add(tempPoint);
+							movingY++;
+							moves--;
+				  }
+				  else if(y < movingY)
+				  {
+					Point tempPoint = new Point(movingX, movingY-1);
+							path.Add(tempPoint);
+							movingY++;
+							moves--;
+				  }
+				  else
+				  {
+					return path;
+				  }
+				}
+				else
+				{
+						Point tempPoint = new Point(movingX+1, movingY);
+						path.Add(tempPoint);
+						movingX++;
+						moves--;
+				}
+				}
+		else if(x < movingX && moves > 0)
 			{
         if(tilemap.GetTile(tilemap.WorldToCell(new Vector3(movingX-1, movingY, 0))).name == "mountains")
         {
@@ -593,7 +592,6 @@ public class CharacterTurnMove : MonoBehaviour
 			}
 			else if(moves == 0 || (movingX == x && movingY == y))
 			{
-				
 				return path;
 			}
 
