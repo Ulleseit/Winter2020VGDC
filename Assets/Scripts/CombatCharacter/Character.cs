@@ -56,11 +56,11 @@ public class Character : MonoBehaviour
 
     public Character()
     {
-        SkillTree[0] = new Skill { amount = 1, active = false, unlocked = true, name = "1", description = "armor", statModifier = new CharacterStats(armor: 1) }; // 0 RootSkill 
+        SkillTree[0] = new Skill { amount = 1, active = false, unlocked = true, name = "1", description = "armor", statModifier = new CharacterStats(health: 1) }; // 0 RootSkill 
         SkillTree[1] = new Skill { amount = 2, active = false, unlocked = false, name = "2", description = "strength", statModifier = new CharacterStats(strength: 2) }; // 1 leftSkillA 
-        SkillTree[2] = new Skill { amount = 3, active = false, unlocked = false, name = "3", description = "mana", statModifier = new CharacterStats(mana: 3) }; // 2 leftSkillB 
-        SkillTree[3] = new Skill { amount = 4, active = false, unlocked = false, name = "4", description = "accuracy", statModifier = new CharacterStats(accuracy: 4) }; // 3 RightSkillA 
-        SkillTree[4] = new Skill { amount = 5, active = false, unlocked = false, name = "5", description = "evasion", statModifier = new CharacterStats(evasion: 5) }; // 4 RightSkillB 
+        SkillTree[2] = new Skill { amount = 3, active = false, unlocked = false, name = "3", description = "mana", statModifier = new CharacterStats(strength: 3) }; // 2 leftSkillB 
+        SkillTree[3] = new Skill { amount = 4, active = false, unlocked = false, name = "4", description = "accuracy", statModifier = new CharacterStats(health: 4) }; // 3 RightSkillA 
+        SkillTree[4] = new Skill { amount = 5, active = false, unlocked = false, name = "5", description = "evasion", statModifier = new CharacterStats(strength: 5) }; // 4 RightSkillB 
         SkillTree[5] = new Skill { amount = 6, active = false, unlocked = false, name = "6", description = "health", statModifier = new CharacterStats(health: 6) }; // 5 LastSkill 
 
         for (int i = 0; i < NumSkill; i++)

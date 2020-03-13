@@ -211,19 +211,21 @@ public class CharacterTurnMove : MonoBehaviour
 			{
 				enemyPosition = new Vector3(enemyPosition.x+1, enemyPosition.y, enemyPosition.z);
 			}
-			else if(checkOccupancy(new Vector3(enemyPosition.x-1, enemyPosition.y, enemyPosition.z)) && tilemap.GetTile(tilemap.WorldToCell(new Vector3(enemyPosition.x-1, enemyPosition.y, 0))).name != "mountains")
-			{
-				enemyPosition = new Vector3(enemyPosition.x-1, enemyPosition.y, enemyPosition.z);
-			}
 			else if(checkOccupancy(new Vector3(enemyPosition.x, enemyPosition.y+1, enemyPosition.z)) && tilemap.GetTile(tilemap.WorldToCell(new Vector3(enemyPosition.x, enemyPosition.y+1, 0))).name != "mountains")
 			{
 				enemyPosition = new Vector3(enemyPosition.x, enemyPosition.y+1, enemyPosition.z);
+			}
+			else if(checkOccupancy(new Vector3(enemyPosition.x-1, enemyPosition.y, enemyPosition.z)) && tilemap.GetTile(tilemap.WorldToCell(new Vector3(enemyPosition.x-1, enemyPosition.y, 0))).name != "mountains")
+			{
+				enemyPosition = new Vector3(enemyPosition.x-1, enemyPosition.y, enemyPosition.z);
 			}
 			else if(checkOccupancy(new Vector3(enemyPosition.x, enemyPosition.y-1, enemyPosition.z)) && tilemap.GetTile(tilemap.WorldToCell(new Vector3(enemyPosition.x, enemyPosition.y-1, 0))).name != "mountains")
 			{
 				enemyPosition = new Vector3(enemyPosition.x, enemyPosition.y-1, enemyPosition.z);
 			}
 			//Make an else to go to second most if first is surrounded
+			Debug.Log(enemyPosition.x);
+			Debug.Log(enemyPosition.y);
 			List<Point> p = stepTowardsPath(enemyPosition.x, enemyPosition.y);
 			StartCoroutine(stepThroughPath(p));
 			selected.GetComponent<Character>().reduceInitiative();

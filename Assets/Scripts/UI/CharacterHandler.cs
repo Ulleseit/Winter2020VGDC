@@ -12,6 +12,7 @@ public class CharacterHandler : MonoBehaviour
     {
         CharactersList = new List<Character>();
         createChar();
+		createChar();
     }
     public void createChar()
     {
@@ -36,7 +37,7 @@ public class CharacterHandler : MonoBehaviour
     }
 	string randomName()
 	{
-		string[] names = new string[]{"Elyot", "Gawen", "Gilow"};
-		return names[(int)Random.Range(0, 2.0f)];
+		string[] names = new string[]{"Elyot", "Gawen", "Gilow", "Fery", "Hewe", "Paulin", "Timm", "Belet", "Ioetta", "Hawys"};
+		return names[(int)Random.Range(0, 9.0f)];
 	}
 }
