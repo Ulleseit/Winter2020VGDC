@@ -28,7 +28,13 @@ public class InventoryHandler : MonoBehaviour
 	{
 		if (ItemList.Count <= numItemSlot)
 		{
+			var Invenlist = gameObject.GetComponent<UiInventory>().Inventory;
 			ItemList.Add(item);
+			for(int i = 0; i < Invenlist.Count; i++){
+				if(Invenlist[i].GetComponent<UISlot>().filled == false)
+					Invenlist[i].GetComponent<UISlot>().item = item;	
+			}
+				
 		}
 		else
 		{

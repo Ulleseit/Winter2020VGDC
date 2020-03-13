@@ -22,6 +22,7 @@ public class itemdragHandler : MonoBehaviour , IBeginDragHandler, IDragHandler, 
     public void OnEndDrag(PointerEventData eventData)
     {
     	var results = new List<RaycastResult>();
+    	transform.parent = current.transform;
     	transform.localPosition = Vector3.zero;
     	pointerEventData.position = Input.mousePosition;
         EventSystem.current.RaycastAll(pointerEventData, results);
@@ -47,6 +48,7 @@ public class itemdragHandler : MonoBehaviour , IBeginDragHandler, IDragHandler, 
 		    // Swapping references.
 		    slot.item = current.item;
 		    current.item = null;
+		    current = slot;
 		    transform.parent = hit.gameObject.transform;
 		    transform.position = transform.parent.position;
 		}
